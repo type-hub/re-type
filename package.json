@@ -1,0 +1,25 @@
+{
+  "name": "@type-hub/re-type",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.1.2"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.31.0"
+  }
+}

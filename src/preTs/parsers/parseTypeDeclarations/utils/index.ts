@@ -1,7 +1,7 @@
-import { regexExtractTypesAndValidations } from "../../../regexes"
+import { regexes } from "../../../../regexes"
 
 export const extractTypeDeclarations = (typeFunc: string) => {
-  const match = typeFunc.match(regexExtractTypesAndValidations)
+  const match = typeFunc.match(regexes.extractTypesAndValidations)
 
   if (!match) {
     throw new Error(

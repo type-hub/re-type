@@ -1,1 +1,1 @@
-export * from "./typeParser"
+export * from "./typeParserOld"

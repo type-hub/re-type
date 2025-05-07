@@ -43,7 +43,7 @@ type ErrorsLookup = {
 /**
  * @see www.wp.pl
  */
-export type NewError<
+export type TypeError<
   ErrorType extends keyof ErrorsLookup,
   Context extends string,
   Value
@@ -71,16 +71,16 @@ export type NonErrorObj = object & {
 // -----------------------
 
 // prettier-ignore
-export type NeverError      <CX extends string, T> = NewError<"NeverError",       Trace<CX, "NeverError">, T>
+export type NeverError      <CX extends string, T> = TypeError<"NeverError",       Trace<CX, "NeverError">, T>
 // prettier-ignore
-export type AnyError        <CX extends string, T> = NewError<"AnyError",         Trace<CX, "AnyError">, T>
+export type AnyError        <CX extends string, T> = TypeError<"AnyError",         Trace<CX, "AnyError">, T>
 // prettier-ignore
-export type UnknownError    <CX extends string, T> = NewError<"UnknownError",     Trace<CX, "UnknownError">, T>
+export type UnknownError    <CX extends string, T> = TypeError<"UnknownError",     Trace<CX, "UnknownError">, T>
 // prettier-ignore
-export type MismatchError   <CX extends string, T> = NewError<"MismatchError",    Trace<CX, "MismatchError">, T>
+export type MismatchError   <CX extends string, T> = TypeError<"MismatchError",    Trace<CX, "MismatchError">, T>
 // prettier-ignore
-export type NonLiteralError <CX extends string, T> = NewError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T>
+export type NonLiteralError <CX extends string, T> = TypeError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T>
 // prettier-ignore
-export type EmptyStringError<CX extends string, T> = NewError<"EmptyStringError", Trace<CX, "EmptyStringError">, T>
+export type EmptyStringError<CX extends string, T> = TypeError<"EmptyStringError", Trace<CX, "EmptyStringError">, T>
 // prettier-ignore
-export type OpenTypeError   <CX extends string, T> = NewError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T>
+export type OpenTypeError   <CX extends string, T> = TypeError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T>

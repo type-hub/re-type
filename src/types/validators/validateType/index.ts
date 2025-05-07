@@ -1,5 +1,5 @@
 import type { If$ } from "../../conditionals"
-import type { NewError } from "../../errors"
+import type { TypeError } from "../../errors"
 import { FilterError$ } from "../../filters"
 import { Trace } from "../../trace"
 import type { VALIDATOR_MODES } from "../../validators"
@@ -11,7 +11,7 @@ type _ValidateType<
   Match
 > = [T] extends [Match]
   ? If$<Mode, "either", T>
-  : NewError<
+  : TypeError<
       "MismatchError",
       Trace<CX, "_ValidateType">,
       T

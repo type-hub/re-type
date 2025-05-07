@@ -1,4 +1,3 @@
-// AUTO-GENERATED FILE. DO NOT EDIT.
 
 export class TypeUtils {
   SafeValue<E, T>(): string {

@@ -1,319 +1,308 @@
+// AUTO-GENERATED FILE. DO NOT EDIT.
+
 export class TypeUtils {
-  SafeValue() {
-    // type SafeValue<E, T> = [E] extends [never]
-    //   ? T
-    //   : E
+  SafeValue<E, T>(): string {
+  const typeDef =`type SafeValue<E, T> = [E] extends [never]
+  ? T
+  : E` 
+  return typeDef
   }
 
-  IfElse$() {
-    // type IfElse$<A, B, C, D> = A extends B
-    //   ? C
-    //   : D
+  IfElse$<A, B, C, D>(): string {
+  const typeDef =`type IfElse$<A, B, C, D> = A extends B
+  ? C
+  : D` 
+  return typeDef
   }
 
-  If$() {
-    // type If$<A, B, C> = IfElse$<A, B, C, never>
+  If$<A, B, C>(): string {
+  const typeDef =`type If$<A, B, C> = IfElse$<A, B, C, never>` 
+  return typeDef
   }
 
-  FilterType$() {
-    // type FilterType$<
-    //   All,
-    //   Sub extends All,
-    // > = All extends Sub ? All : never
+  FilterType$<All, Sub extends All, >(): string {
+  const typeDef =`type FilterType$<
+  All,
+  Sub extends All,
+> = All extends Sub ? All : never` 
+  return typeDef
   }
 
-  RejectType$() {
-    // type RejectType$<
-    //   All,
-    //   Sub extends All,
-    // > = All extends Sub ? never : All
+  RejectType$<All, Sub extends All, >(): string {
+  const typeDef =`type RejectType$<
+  All,
+  Sub extends All,
+> = All extends Sub ? never : All` 
+  return typeDef
   }
 
-  NewError() {
-    // type NewError<
-    //   ErrorType extends keyof ErrorsLookup,
-    //   Context extends string,
-    //   Value
-    // > = {
-    //   __type: ErrorType
-    //   __message: ErrorsLookup[ErrorType]["msg"]
-    //   __url: ErrorsLookup[ErrorType]["url"]
-    //   __context: Context
-    //   __value: Value & {}
-    // }
+  TypeError<_ErrorType extends keyof ErrorsLookup, Context extends string, Value>(): string {
+  const typeDef =`type TypeError<
+  _ErrorType extends keyof ErrorsLookup,
+  Context extends string,
+  Value
+> = {
+  __type: _ErrorType
+  __message: ErrorsLookup[_ErrorType]["msg"]
+  __context: Context
+  __value: Value & {} 
+  __url: ErrorsLookup[_ErrorType]["url"]
+}` 
+  return typeDef
   }
 
-  GENERIC_ERROR() {
-    // type GENERIC_ERROR = {
-    //   __type: keyof ErrorsLookup
-    //   __message?: ErrorsLookup[keyof ErrorsLookup]["msg"]
-    //   __url?: string
-    //   __context?: string
-    //
-    //   __value?: any
-    // }
+  EmptyStringError<CX extends string, T>(): string {
+  const typeDef =`type EmptyStringError<CX extends string, T> = TypeError<"EmptyStringError", Trace<CX, "EmptyStringError">, T>` 
+  return typeDef
   }
 
-  NonErrorObj() {
-    // type NonErrorObj = object & {
-    //   __message: never
-    //   __url: never
-    // }
+  FilterError$<T>(): string {
+  const typeDef =`type FilterError$<T> =
+  IsError_<T> extends true ? T : never` 
+  return typeDef
   }
 
-  NeverError() {
-    // type NeverError      <CX extends string, T> = NewError<"NeverError",       Trace<CX, "NeverError">, T>
+  IsNever<T>(): string {
+  const typeDef =`type IsNever<T> = [T] extends [never] ? true : false` 
+  return typeDef
   }
 
-  AnyError() {
-    // type AnyError        <CX extends string, T> = NewError<"AnyError",         Trace<CX, "AnyError">, T>
+  IsAny<T>(): string {
+  const typeDef =`type IsAny<T> = [IsNever<T>] extends [true]
+  ? false
+  : 0 extends 1 & T
+  ? true
+  : false` 
+  return typeDef
   }
 
-  UnknownError() {
-    // type UnknownError    <CX extends string, T> = NewError<"UnknownError",     Trace<CX, "UnknownError">, T>
+  IsUnknown<T>(): string {
+  const typeDef =`type IsUnknown<T> = [IsNever<T>] extends [true]
+  ? false
+  : 0 extends 1 & T
+  ? false
+  : [unknown] extends [T]
+  ? true
+  : false` 
+  return typeDef
   }
 
-  MismatchError() {
-    // type MismatchError   <CX extends string, T> = NewError<"MismatchError",    Trace<CX, "MismatchError">, T>
+  IsOpenType<T>(): string {
+  const typeDef =`type IsOpenType<T> = [T] extends [never] 
+  ? true
+  : 0 extends 1 & T 
+  ? true
+  : [unknown] extends [T] 
+  ? true
+  : false` 
+  return typeDef
   }
 
-  NonLiteralError() {
-    // type NonLiteralError <CX extends string, T> = NewError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T>
+  IsNil<T>(): string {
+  const typeDef =`type IsNil<T> = [IsOpenType<T>] extends [true]
+  ? false
+  : [T] extends [NIL]
+  ? true
+  : false` 
+  return typeDef
   }
 
-  EmptyStringError() {
-    // type EmptyStringError<CX extends string, T> = NewError<"EmptyStringError", Trace<CX, "EmptyStringError">, T>
+  IsError_<T>(): string {
+  const typeDef =`type IsError_<T> = T extends {
+  
+  [key: string]: any
+}
+  ? 
+    T extends GENERIC_ERROR
+    ? true
+    : false
+  : false` 
+  return typeDef
   }
 
-  OpenTypeError() {
-    // type OpenTypeError   <CX extends string, T> = NewError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T>
+  Trace<Context extends string, Name extends string, Next extends string = "">(): string {
+  const typeDef =`type Trace<
+  Context extends string,
+  Name extends string,
+  Next extends string = ""
+> = Next extends ""
+  ? _Trace<Context, Name>
+  : 
+    _Trace<Context, _Trace<Name, Next>>` 
+  return typeDef
   }
 
-  FilterError$() {
-    // type FilterError$<T> =
-    //   IsError_<T> extends true ? T : never
+  Validate$<T, CX extends string = "", >(): string {
+  const typeDef =`type Validate$<
+  T,
+  CX extends string = "",
+> = CoreValidate$<
+  
+  T,
+  "never",
+  Trace<CX, "Validate$">
+>` 
+  return typeDef
   }
 
-  IsNever() {
-    // type IsNever<T> = [T] extends [never] ? true : false
+  EitherValidate<T, CX extends string = "", >(): string {
+  const typeDef =`type EitherValidate<
+  T,
+  CX extends string = "",
+> = CoreValidate$<
+  T,
+  "either",
+  Trace<CX, "EitherValidate">
+>` 
+  return typeDef
   }
 
-  IsAny() {
-    // type IsAny<T> = [IsNever<T>] extends [true]
-    //   ? false
-    //   : 0 extends 1 & T
-    //   ? true
-    //   : false
+  ValidateEmptyString$<T>(): string {
+  const typeDef =`type ValidateEmptyString$<T> = SafeChain<
+  "never",
+  FilterError$<T>,
+  T
+>` 
+  return typeDef
   }
 
-  IsUnknown() {
-    // type IsUnknown<T> = [IsNever<T>] extends [true]
-    //   ? false
-    //   : 0 extends 1 & T
-    //   ? false
-    //   : [unknown] extends [T]
-    //   ? true
-    //   : false
+  EitherValidate_EmptyString$<T>(): string {
+  const typeDef =`type EitherValidate_EmptyString$<T> =
+  SafeChain<
+    
+    "either",
+    FilterError$<T>,
+    T
+  >` 
+  return typeDef
   }
 
-  IsOpenType() {
-    // type IsOpenType<T> = [T] extends [never]
-    //   ? true
-    //   : 0 extends 1 & T
-    //   ? true
-    //   : [unknown] extends [T]
-    //   ? true
-    //   : false
+  ValidateLiteral$<Mode extends VALIDATOR_MODES, T, Match>(): string {
+  const typeDef =`type ValidateLiteral$<
+  Mode extends VALIDATOR_MODES,
+  T,
+  Match
+> = [T] extends [Match]
+  ? [Match] extends [T]
+    ? NonLiteralError<"ValidateLiteral$", T>
+    : If$<Mode, "either", T>
+  : MismatchError<"_ValidateLiteral", T>` 
+  return typeDef
   }
 
-  IsNil() {
-    // type IsNil<T> = [IsOpenType<T>] extends [true]
-    //   ? false
-    //   : [T] extends [NIL]
-    //   ? true
-    //   : false
+  Validate_StringLiteral<T>(): string {
+  const typeDef =`type Validate_StringLiteral<T> = Configure<
+  "never",
+  T,
+  string
+>` 
+  return typeDef
   }
 
-  IsError_() {
-    // type IsError_<T> = T extends {
-    //
-    //   [key: string]: any
-    // }
-    //   ?
-    //     T extends GENERIC_ERROR
-    //     ? true
-    //     : false
-    //   : false
+  Validate_NumberLiteral<T>(): string {
+  const typeDef =`type Validate_NumberLiteral<T> = Configure<
+  "never",
+  T,
+  number
+>` 
+  return typeDef
   }
 
-  Trace() {
-    // type Trace<
-    //   Context extends string,
-    //   Name extends string,
-    //   Next extends string = ""
-    // > = Next extends ""
-    //   ? _Trace<Context, Name>
-    //   :
-    //     _Trace<Context, _Trace<Name, Next>>
+  Validate_BooleanLiteral<T>(): string {
+  const typeDef =`type Validate_BooleanLiteral<T> =
+  Configure<"never", T, boolean>` 
+  return typeDef
   }
 
-  VALIDATOR_MODES() {
-    // type VALIDATOR_MODES = "never" | "either"
+  EitherValidate_StringLiteral<T>(): string {
+  const typeDef =`type EitherValidate_StringLiteral<T> =
+  Configure<"either", T, string>` 
+  return typeDef
   }
 
-  Validate$() {
-    // type Validate$<
-    //   T,
-    //   CX extends string = "",
-    // > = CoreValidate$<
-    //
-    //   T,
-    //   "never",
-    //   Trace<CX, "Validate$">
-    // >
+  EitherValidate_NumberLiteral<T>(): string {
+  const typeDef =`type EitherValidate_NumberLiteral<T> =
+  Configure<"either", T, number>` 
+  return typeDef
   }
 
-  EitherValidate() {
-    // type EitherValidate<
-    //   T,
-    //   CX extends string = "",
-    // > = CoreValidate$<
-    //   T,
-    //   "either",
-    //   Trace<CX, "EitherValidate">
-    // >
+  EitherValidate_BooleanLiteral<T>(): string {
+  const typeDef =`type EitherValidate_BooleanLiteral<T> =
+  Configure<"either", T, boolean>` 
+  return typeDef
   }
 
-  ValidateEmptyString$() {
-    // type ValidateEmptyString$<T> = SafeChain<
-    //   "never",
-    //   FilterError$<T>,
-    //   T
-    // >
+  ValidateNever$<T>(): string {
+  const typeDef =`type ValidateNever$<T> = [T] extends [
+  never
+]
+  ? NeverError<"ValidateNever$", T>
+  : never` 
+  return typeDef
   }
 
-  EitherValidate_EmptyString$() {
-    // type EitherValidate_EmptyString$<T> =
-    //   SafeChain<
-    //
-    //     "either",
-    //     FilterError$<T>,
-    //     T
-    //   >
+  ValidateAny$<T>(): string {
+  const typeDef =`type ValidateAny$<T> = [
+  IsError_<T>
+] extends [true]
+  ? T
+  : 0 extends 1 & T
+  ? AnyError<"ValidateAny$", T>
+  : never` 
+  return typeDef
   }
 
-  ValidateLiteral$() {
-    // type ValidateLiteral$<
-    //   Mode extends VALIDATOR_MODES,
-    //   T,
-    //   Match
-    // > = [T] extends [Match]
-    //   ? [Match] extends [T]
-    //     ? NonLiteralError<"ValidateLiteral$", T>
-    //     : If$<Mode, "either", T>
-    //   : MismatchError<"_ValidateLiteral", T>
+  ValidateUnknown<T>(): string {
+  const typeDef =`export type ValidateUnknown<T> = [
+  IsError_<T>
+] extends [true] 
+  ? T
+  : [unknown] extends [T]
+  ? TypeError<
+      "UnknownError",
+      "InValidateUnknown",
+      T
+    >
+  : never` 
+  return typeDef
   }
 
-  Validate_StringLiteral() {
-    // type Validate_StringLiteral<T> = Configure<
-    //   "never",
-    //   T,
-    //   string
-    // >
+  ValidateType$<CX extends string, T$, Match>(): string {
+  const typeDef =`type ValidateType$<
+  CX extends string,
+  T$,
+  Match
+> = SafeChain<
+  CX,
+  "never",
+  FilterError$<T$>,
+  T$,
+  Match
+>` 
+  return typeDef
   }
 
-  Validate_NumberLiteral() {
-    // type Validate_NumberLiteral<T> = Configure<
-    //   "never",
-    //   T,
-    //   number
-    // >
+  EitherValidate_Type$<T$, Match>(): string {
+  const typeDef =`type EitherValidate_Type$<T$, Match> =
+  SafeChain<
+    "CX",
+    "either",
+    FilterError$<T$>,
+    T$,
+    Match
+  >` 
+  return typeDef
   }
 
-  Validate_BooleanLiteral() {
-    // type Validate_BooleanLiteral<T> =
-    //   Configure<"never", T, boolean>
+  ValidateUsableSting$<T>(): string {
+  const typeDef =`type ValidateUsableSting$<T> =
+  FilterError$<Check<T>>` 
+  return typeDef
   }
 
-  EitherValidate_StringLiteral() {
-    // type EitherValidate_StringLiteral<T> =
-    //   Configure<"either", T, string>
-  }
-
-  EitherValidate_NumberLiteral() {
-    // type EitherValidate_NumberLiteral<T> =
-    //   Configure<"either", T, number>
-  }
-
-  EitherValidate_BooleanLiteral() {
-    // type EitherValidate_BooleanLiteral<T> =
-    //   Configure<"either", T, boolean>
-  }
-
-  ValidateNever$() {
-    // type ValidateNever$<T> = [T] extends [
-    //   never
-    // ]
-    //   ? NeverError<"ValidateNever$", T>
-    //   : never
-  }
-
-  ValidateAny$() {
-    // type ValidateAny$<T> = [
-    //   IsError_<T>
-    // ] extends [true]
-    //   ? T
-    //   : 0 extends 1 & T
-    //   ? AnyError<"ValidateAny$", T>
-    //   : never
-  }
-
-  ValidateUnknown() {
-    // export type ValidateUnknown<T> = [
-    //   IsError_<T>
-    // ] extends [true]
-    //   ? T
-    //   : [unknown] extends [T]
-    //   ? NewError<
-    //       "UnknownError",
-    //       "InValidateUnknown",
-    //       T
-    //     >
-    //   : never
-  }
-
-  ValidateType$() {
-    // type ValidateType$<
-    //   CX extends string,
-    //   T$,
-    //   Match
-    // > = SafeChain<
-    //   CX,
-    //   "never",
-    //   FilterError$<T$>,
-    //   T$,
-    //   Match
-    // >
-  }
-
-  EitherValidate_Type$() {
-    // type EitherValidate_Type$<T$, Match> =
-    //   SafeChain<
-    //     "CX",
-    //     "either",
-    //     FilterError$<T$>,
-    //     T$,
-    //     Match
-    //   >
-  }
-
-  ValidateUsableSting$() {
-    // type ValidateUsableSting$<T> =
-    //   FilterError$<Check<T>>
-  }
-
-  CH_ValidateUsableSting$() {
-    // type CH_ValidateUsableSting$<T> =
-    //   FilterError$<Check<T>>
+  CH_ValidateUsableSting$<T>(): string {
+  const typeDef =`type CH_ValidateUsableSting$<T> =
+  FilterError$<Check<T>>` 
+  return typeDef
   }
 }

@@ -3,56 +3,57 @@ import { Trace } from "../trace"
 // TODO: add branding
 // declare const __brand: unique symbol
 
-type ErrorsLookup = {
+const ERRORS_LOOKUP = {
   // input --------------------------------
   OpenTypeError: {
-    msg: "input: is open types (any, unknown, never)"
-    url: "www.wp.pl/a"
-  }
+    msg: "input: is open types (any, unknown, never)",
+    url: "www.wp.pl/a",
+  },
   NeverError: {
-    msg: "input: is open type (any, unknown, never)"
-    url: "www.wp.pl/b"
-  }
+    msg: "input: is open type (any, unknown, never)",
+    url: "www.wp.pl/b",
+  },
   AnyError: {
-    msg: "input: do not pass any as input"
-    url: "www.wp.pl/c"
-  }
+    msg: "input: do not pass any as input",
+    url: "www.wp.pl/c",
+  },
   UnknownError: {
-    msg: "input: do not pass unknown as input"
-    url: "www.wp.pl/d"
-  }
+    msg: "input: do not pass unknown as input",
+    url: "www.wp.pl/d",
+  },
   MismatchError: {
-    msg: "input: type mismatch"
-    url: "www.wp.pl/e"
-  }
+    msg: "input: type mismatch",
+    url: "www.wp.pl/e",
+  },
   NonLiteralError: {
-    msg: "input: provided type is not literal"
-    url: "www.wp.pl/f"
-  }
+    msg: "input: provided type is not literal",
+    url: "www.wp.pl/f",
+  },
   EmptyStringError: {
-    msg: "input: empty string"
-    url: "www.wp.pl/g"
-  }
+    msg: "input: empty string",
+    url: "www.wp.pl/g",
+  },
   // output --------------------------------
   OutputError: {
-    msg: "output: open type"
-    url: "www.wp.pl/h"
-  }
-}
+    msg: "output: open type",
+    url: "www.wp.pl/h",
+  },
+} as const
 
-/**
- * @see www.wp.pl
- */
+type ErrorsLookup = typeof ERRORS_LOOKUP
+export type ErrorType = keyof ErrorsLookup
+
+// TODO: js docs
 export type TypeError<
-  ErrorType extends keyof ErrorsLookup,
+  _ErrorType extends keyof ErrorsLookup,
   Context extends string,
   Value
 > = {
-  __type: ErrorType
-  __message: ErrorsLookup[ErrorType]["msg"]
-  __url: ErrorsLookup[ErrorType]["url"]
+  __type: _ErrorType
+  __message: ErrorsLookup[_ErrorType]["msg"]
   __context: Context
   __value: Value & {} // TODO: pretty
+  __url: ErrorsLookup[_ErrorType]["url"]
 }
 
 export type GENERIC_ERROR = {

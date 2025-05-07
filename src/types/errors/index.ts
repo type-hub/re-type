@@ -3,56 +3,57 @@ import { Trace } from "../trace"
 // TODO: add branding
 // declare const __brand: unique symbol
 
-type ErrorsLookup = {
+const ERRORS_LOOKUP = {
   // input --------------------------------
   OpenTypeError: {
-    msg: "input: is open types (any, unknown, never)"
-    url: "www.wp.pl/a"
-  }
+    msg: "input: is open types (any, unknown, never)",
+    url: "www.wp.pl/a",
+  },
   NeverError: {
-    msg: "input: is open type (any, unknown, never)"
-    url: "www.wp.pl/b"
-  }
+    msg: "input: is open type (any, unknown, never)",
+    url: "www.wp.pl/b",
+  },
   AnyError: {
-    msg: "input: do not pass any as input"
-    url: "www.wp.pl/c"
-  }
+    msg: "input: do not pass any as input",
+    url: "www.wp.pl/c",
+  },
   UnknownError: {
-    msg: "input: do not pass unknown as input"
-    url: "www.wp.pl/d"
-  }
+    msg: "input: do not pass unknown as input",
+    url: "www.wp.pl/d",
+  },
   MismatchError: {
-    msg: "input: type mismatch"
-    url: "www.wp.pl/e"
-  }
+    msg: "input: type mismatch",
+    url: "www.wp.pl/e",
+  },
   NonLiteralError: {
-    msg: "input: provided type is not literal"
-    url: "www.wp.pl/f"
-  }
+    msg: "input: provided type is not literal",
+    url: "www.wp.pl/f",
+  },
   EmptyStringError: {
-    msg: "input: empty string"
-    url: "www.wp.pl/g"
-  }
+    msg: "input: empty string",
+    url: "www.wp.pl/g",
+  },
   // output --------------------------------
   OutputError: {
-    msg: "output: open type"
-    url: "www.wp.pl/h"
-  }
-}
+    msg: "output: open type",
+    url: "www.wp.pl/h",
+  },
+} as const
 
-/**
- * @see www.wp.pl
- */
-export type NewError<
-  ErrorType extends keyof ErrorsLookup,
+type ErrorsLookup = typeof ERRORS_LOOKUP
+export type ErrorType = keyof ErrorsLookup
+
+// TODO: js docs
+export type TypeError<
+  _ErrorType extends keyof ErrorsLookup,
   Context extends string,
   Value
 > = {
-  __type: ErrorType
-  __message: ErrorsLookup[ErrorType]["msg"]
-  __url: ErrorsLookup[ErrorType]["url"]
+  __type: _ErrorType
+  __message: ErrorsLookup[_ErrorType]["msg"]
   __context: Context
   __value: Value & {} // TODO: pretty
+  __url: ErrorsLookup[_ErrorType]["url"]
 }
 
 export type GENERIC_ERROR = {
@@ -71,16 +72,16 @@ export type NonErrorObj = object & {
 // -----------------------
 
 // prettier-ignore
-export type NeverError      <CX extends string, T> = NewError<"NeverError",       Trace<CX, "NeverError">, T>
+export type NeverError      <CX extends string, T> = TypeError<"NeverError",       Trace<CX, "NeverError">, T>
 // prettier-ignore
-export type AnyError        <CX extends string, T> = NewError<"AnyError",         Trace<CX, "AnyError">, T>
+export type AnyError        <CX extends string, T> = TypeError<"AnyError",         Trace<CX, "AnyError">, T>
 // prettier-ignore
-export type UnknownError    <CX extends string, T> = NewError<"UnknownError",     Trace<CX, "UnknownError">, T>
+export type UnknownError    <CX extends string, T> = TypeError<"UnknownError",     Trace<CX, "UnknownError">, T>
 // prettier-ignore
-export type MismatchError   <CX extends string, T> = NewError<"MismatchError",    Trace<CX, "MismatchError">, T>
+export type MismatchError   <CX extends string, T> = TypeError<"MismatchError",    Trace<CX, "MismatchError">, T>
 // prettier-ignore
-export type NonLiteralError <CX extends string, T> = NewError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T>
+export type NonLiteralError <CX extends string, T> = TypeError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T>
 // prettier-ignore
-export type EmptyStringError<CX extends string, T> = NewError<"EmptyStringError", Trace<CX, "EmptyStringError">, T>
+export type EmptyStringError<CX extends string, T> = TypeError<"EmptyStringError", Trace<CX, "EmptyStringError">, T>
 // prettier-ignore
-export type OpenTypeError   <CX extends string, T> = NewError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T>
+export type OpenTypeError   <CX extends string, T> = TypeError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T>

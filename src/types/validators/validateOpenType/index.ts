@@ -1,7 +1,7 @@
 import type {
   AnyError,
   NeverError,
-  TypeError,
+  ReTypeError,
 } from "../../errors"
 import { IsError_ } from "../../predicates"
 
@@ -26,7 +26,7 @@ export type ValidateUnknown<T> = [
 ] extends [true] // this is better, no overlap
   ? T
   : [unknown] extends [T]
-  ? TypeError<
+  ? ReTypeError<
       "UnknownError",
       "InValidateUnknown",
       T

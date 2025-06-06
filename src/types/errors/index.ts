@@ -1,9 +1,25 @@
 import { Trace } from "../trace"
+import { ValueOf } from "../utils"
 
 // TODO: add branding
 // declare const __brand: unique symbol
 
-const ERRORS_LOOKUP = {
+export const ERROR_TYPE = {
+  // input --------------------------------
+  OpenTypeError: "OpenTypeError",
+  NeverError: "NeverError",
+  AnyError: "AnyError",
+  UnknownError: "UnknownError",
+  MismatchError: "MismatchError",
+  NonLiteralError: "NonLiteralError",
+  EmptyStringError: "EmptyStringError",
+  // output --------------------------------
+  OutputError: "OutputError",
+} as const
+
+export type ErrorType = ValueOf<typeof ERROR_TYPE>
+
+export const ERRORS_LOOKUP = {
   // input --------------------------------
   OpenTypeError: {
     msg: "input: is open types (any, unknown, never)",
@@ -38,21 +54,25 @@ const ERRORS_LOOKUP = {
     msg: "output: open type",
     url: "www.wp.pl/h",
   },
-} as const
+} as const satisfies Record<
+  ErrorType,
+  { msg: string; url: string }
+>
 
-type ErrorsLookup = typeof ERRORS_LOOKUP
-export type ErrorType = keyof ErrorsLookup
+export type ErrorsLookup = typeof ERRORS_LOOKUP
 
 // TODO: js docs
-export type TypeError<
+export type ReTypeError<
   _ErrorType extends keyof ErrorsLookup,
   Context extends string,
-  Value
+  Value,
+  Constraint = unknown
 > = {
   __type: _ErrorType
   __message: ErrorsLookup[_ErrorType]["msg"]
   __context: Context
   __value: Value & {} // TODO: pretty
+  __constraint?: Constraint & {} // TODO: pretty
   __url: ErrorsLookup[_ErrorType]["url"]
 }
 
@@ -72,16 +92,16 @@ export type NonErrorObj = object & {
 // -----------------------
 
 // prettier-ignore
-export type NeverError      <CX extends string, T> = TypeError<"NeverError",       Trace<CX, "NeverError">, T>
+export type NeverError      <CX extends string, T, Constraint = unknown> = ReTypeError<"NeverError",       Trace<CX, "NeverError">, T, Constraint>
 // prettier-ignore
-export type AnyError        <CX extends string, T> = TypeError<"AnyError",         Trace<CX, "AnyError">, T>
+export type AnyError        <CX extends string, T, Constraint = unknown> = ReTypeError<"AnyError",         Trace<CX, "AnyError">, T, Constraint>
 // prettier-ignore
-export type UnknownError    <CX extends string, T> = TypeError<"UnknownError",     Trace<CX, "UnknownError">, T>
+export type UnknownError    <CX extends string, T, Constraint = unknown> = ReTypeError<"UnknownError",     Trace<CX, "UnknownError">, T, Constraint>
 // prettier-ignore
-export type MismatchError   <CX extends string, T> = TypeError<"MismatchError",    Trace<CX, "MismatchError">, T>
+export type MismatchError   <CX extends string, T, Constraint = unknown> = ReTypeError<"MismatchError",    Trace<CX, "MismatchError">, T, Constraint>
 // prettier-ignore
-export type NonLiteralError <CX extends string, T> = TypeError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T>
+export type NonLiteralError <CX extends string, T, Constraint = unknown> = ReTypeError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T, Constraint>
 // prettier-ignore
-export type EmptyStringError<CX extends string, T> = TypeError<"EmptyStringError", Trace<CX, "EmptyStringError">, T>
+export type EmptyStringError<CX extends string, T, Constraint = unknown> = ReTypeError<"EmptyStringError", Trace<CX, "EmptyStringError">, T, Constraint>
 // prettier-ignore
-export type OpenTypeError   <CX extends string, T> = TypeError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T>
+export type OpenTypeError   <CX extends string, T, Constraint = unknown> = ReTypeError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T, Constraint>

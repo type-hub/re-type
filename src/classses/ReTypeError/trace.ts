@@ -1,5 +1,5 @@
-import { CONTEXT } from "../consts"
-import { uuid } from "../uuid"
+import { CONTEXT } from "../utils/consts"
+import { uuid } from "./uuid"
 
 export type TraceProps = {
   withID: boolean

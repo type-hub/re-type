@@ -10,10 +10,10 @@ export class Lax extends AbstractTypeBuilder {
   protected withContext: boolean
 
   protected get laxName() {
-    return `${this.parser.name}_Lax`
+    return `${this.parsedType.name}_Lax`
   }
 
-  protected parser: PARSED_TYPE_DECLARATION
+  protected parsedType: PARSED_TYPE_DECLARATION
 
   constructor(
     //
@@ -25,13 +25,13 @@ export class Lax extends AbstractTypeBuilder {
     super()
 
     this.withContext = !!withContext
-    this.parser = parseTypeDeclaration(typeDef)
+    this.parsedType = parseTypeDeclaration(typeDef)
   }
 
   public typeDeclaration() {
     return this.templater.laxTypeDeclaration({
       name: this.laxName,
-      generics: this.parser.generics,
+      generics: this.parsedType.generics,
       body: this.makeLaxBody({ withContext: false, withComments: false }),
       withContext: this.withContext,
     })
@@ -44,7 +44,7 @@ export class Lax extends AbstractTypeBuilder {
   public eitherTypeDeclaration() {
     const {
       laxName: name,
-      parser: { generics },
+      parsedType: { generics },
     } = this
 
     return this.templater.eitherTypeDeclaration({
@@ -59,7 +59,7 @@ export class Lax extends AbstractTypeBuilder {
     // TODO: mismatch error could be more detailed and reuse validation (what it should be)
     // TODO: inside validation missing (before return)
 
-    const { generics, name } = this.parser
+    const { generics, name } = this.parsedType
 
     // TODO: move to utils to templater?
     const conditionalTypeBody = generics

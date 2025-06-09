@@ -1,7 +1,7 @@
 import { ERROR_TYPE, ERRORS_LOOKUP, ErrorsLookup, ErrorType, ReTypeError } from "../../types/errors"
 import { SafeOmit } from "../../typeUtils"
 import { GENERIC } from "../utils/parseTypeDeclarations"
-import { trace, TraceProps } from "../utils/trace"
+import { trace, TraceProps } from "./trace"
 
 type MismatchErrorProps = SafeOmit<TraceProps, "currentArg"> & {
   generic: GENERIC

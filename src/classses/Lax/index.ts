@@ -1,49 +1,65 @@
 import { prop } from "ramda"
 import { AbstractTypeBuilder } from "../abstract"
 import { Templater } from "../Templater"
-import { TypeParser } from "../typeParser"
-import { resolveGenerics } from "../utils"
+import { TypeBuilder } from "../TypeBuilder"
+import { WITH_COMMENTS, WITH_CONTEXT } from "../types"
+import { resolveGenerics } from "../utils/generics"
+import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "../utils/parseTypeDeclarations"
 
 export class Lax extends AbstractTypeBuilder {
   protected withContext: boolean
 
-  constructor(private parser: TypeParser, private templater: Templater, withContext?: boolean) {
+  protected get laxName() {
+    return `${this.parser.name}_Lax`
+  }
+
+  protected parser: PARSED_TYPE_DECLARATION
+
+  constructor(
+    //
+    typeDef: string,
+    private templater: Templater,
+    private typeBuilder: TypeBuilder,
+    withContext?: boolean,
+  ) {
     super()
 
     this.withContext = !!withContext
+    this.parser = parseTypeDeclaration(typeDef)
   }
 
-  // --- PUBLIC ---
-
-  public define() {
-    return this.templater.define({
-      name: this.name,
+  public typeDeclaration() {
+    return this.templater.laxTypeDeclaration({
+      name: this.laxName,
       generics: this.parser.generics,
-      body: this.makeBody({ withContext: false, withComments: false }),
+      body: this.makeLaxBody({ withContext: false, withComments: false }),
       withContext: this.withContext,
     })
   }
 
-  public inline() {
-    return this.makeBody({ withContext: false, withComments: true })
+  public inlineInvocation() {
+    return this.makeLaxBody({ withContext: false, withComments: true })
   }
 
-  // --- PROTECTED ---
+  public eitherTypeDeclaration() {
+    const {
+      laxName: name,
+      parser: { generics },
+    } = this
 
-  protected get name() {
-    return `${this.parser.name}_Lax`
+    return this.templater.eitherTypeDeclaration({
+      name,
+      generics,
+    })
   }
 
-  protected makeBody({ withContext, withComments }: { withContext: boolean; withComments: boolean }) {
+  // --- PROTECTED ----------------------------------------------------------------------
+
+  protected makeLaxBody({ withContext, withComments }: WITH_CONTEXT & WITH_COMMENTS) {
     // TODO: mismatch error could be more detailed and reuse validation (what it should be)
     // TODO: inside validation missing (before return)
 
-    const generics = this.parser.generics
-
-    const invocationConfig = {
-      name: this.parser.name,
-      generics: resolveGenerics({ withContext, generics }),
-    }
+    const { generics, name } = this.parser
 
     // TODO: move to utils to templater?
     const conditionalTypeBody = generics
@@ -52,13 +68,16 @@ export class Lax extends AbstractTypeBuilder {
       .reverse()
       .reduce(
         //
-        this.templater.renderConditionalBody(this.name),
-        this.templater.renderTypeInvocation(invocationConfig),
+        this.typeBuilder.convertGenericToConditional(this.laxName),
+        this.typeBuilder.createTypeInvocation({
+          name,
+          generics: resolveGenerics({ withContext, generics }),
+        }),
       )
 
     if (withComments) {
       return this.templater.renderInline({
-        name: this.name,
+        name: this.laxName,
         body: conditionalTypeBody,
       })
     }

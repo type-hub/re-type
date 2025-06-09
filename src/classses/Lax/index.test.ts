@@ -4,12 +4,11 @@ import { JSDocGenerator } from "../JSDocGenerator"
 import { ReTypeErrorTemplate } from "../ReTypeError"
 import { Templater } from "../Templater"
 import { TypeBuilder } from "../TypeBuilder"
-import { TypeParser } from "../typeParser"
 
 describe("TypeParser", () => {
   it("should create relaxed variant", () => {
     const lax = new Lax(
-      new TypeParser("type Pick<A extends string, B extends number, C = 1> = A | B | C"),
+      "type Pick<A extends string, B extends number, C = 1> = A | B | C",
       new Templater(new JSDocGenerator(), new TypeBuilder(new ReTypeErrorTemplate())),
       new TypeBuilder(new ReTypeErrorTemplate()),
       true,

@@ -1,9 +1,9 @@
 import { SafeOmit } from "../../typeUtils"
 import { JSDocGenerator } from "../JSDocGenerator"
 import { TypeBuilder } from "../TypeBuilder"
-import { PARSED_TYPE_DECLARATION } from "../typeParser"
 import { WITH_CONTEXT } from "../types"
-import { resolveGenerics } from "../utils"
+import { resolveGenerics } from "../utils/generics"
+import { PARSED_TYPE_DECLARATION } from "../utils/parseTypeDeclarations"
 
 type InlineTemplateData = {
   name: string

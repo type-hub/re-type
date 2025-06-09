@@ -1,5 +1,5 @@
 import { SafeOmit } from "../../typeUtils"
-import { PARSED_TYPE_DECLARATION } from "../typeParser"
+import { PARSED_TYPE_DECLARATION } from "../utils/parseTypeDeclarations"
 
 export class JSDocGenerator {
   public document({ name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) {

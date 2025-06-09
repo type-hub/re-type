@@ -1,7 +1,18 @@
-import { regexes } from "../../../../regexes"
-import { GENERIC, PARSED_TYPE_DECLARATION } from "../../types"
+import { regexes } from "../../../regexes"
 
-export const parseTypeDeclarations = (_typeFunc: string): PARSED_TYPE_DECLARATION => {
+export type GENERIC = {
+  name: string
+  constraint?: string
+  defaultValue?: string
+}
+
+export type PARSED_TYPE_DECLARATION = {
+  name: string
+  generics: GENERIC[]
+  body: string
+}
+
+export const parseTypeDeclaration = (_typeFunc: string): PARSED_TYPE_DECLARATION => {
   const typeFunc = _typeFunc.trim()
   const match = typeFunc.match(regexes.extractTypesAndValidations)
 

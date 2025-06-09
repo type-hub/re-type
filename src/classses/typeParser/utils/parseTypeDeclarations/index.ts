@@ -1,7 +1,7 @@
 import { regexes } from "../../../../regexes"
-import { Generic, ParsedTypeDeclaration } from "../../../types"
+import { GENERIC, PARSED_TYPE_DECLARATION } from "../../types"
 
-export const parseTypeDeclarations = (_typeFunc: string): ParsedTypeDeclaration => {
+export const parseTypeDeclarations = (_typeFunc: string): PARSED_TYPE_DECLARATION => {
   const typeFunc = _typeFunc.trim()
   const match = typeFunc.match(regexes.extractTypesAndValidations)
 
@@ -23,7 +23,7 @@ export const parseTypeDeclarations = (_typeFunc: string): ParsedTypeDeclaration 
     throw new Error(`parseTypeDeclarations: Type function body not found in type definition: ${typeFunc}`)
   }
 
-  const generics: Generic[] = []
+  const generics: GENERIC[] = []
 
   for (let i = 0; i < rawArgs.length; i++) {
     const arg = rawArgs[i]

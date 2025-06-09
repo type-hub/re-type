@@ -1,9 +1,10 @@
 import { ERROR_TYPE, ERRORS_LOOKUP, ErrorsLookup, ErrorType, ReTypeError } from "../../types/errors"
-import { Generic, SafeOmit } from "../types"
+import { SafeOmit } from "../../typeUtils"
+import { GENERIC } from "../typeParser"
 import { trace, TraceProps } from "../utils"
 
 type MismatchErrorProps = SafeOmit<TraceProps, "currentArg"> & {
-  generic: Generic
+  generic: GENERIC
 }
 
 // INFO: Ensure proper overlap with ErrorType
@@ -16,7 +17,7 @@ const buildReTypeError = <
   //
   _ErrorType extends keyof ErrorsLookup,
   Context extends string,
-  _Generic extends Generic,
+  _Generic extends GENERIC,
 >(
   __type: _ErrorType,
   __context: Context,

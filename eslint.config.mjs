@@ -15,9 +15,7 @@ export default [
       globals: globals.browser,
       parserOptions: {
         project: true, // This will automatically find your tsconfig.json
-        tsconfigRootDir: path
-          .dirname(import.meta.url)
-          .replace(/^file:\/\//, ""),
+        tsconfigRootDir: path.dirname(import.meta.url).replace(/^file:\/\//, ""),
       },
     },
   },
@@ -34,6 +32,8 @@ export default [
         "error",
         {
           varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
         },
       ],
     },

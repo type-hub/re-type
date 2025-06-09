@@ -1,3 +1,5 @@
+import { WITH_COMMENTS, WITH_CONTEXT } from "../types"
+
 export abstract class AbstractTypeBuilder {
   protected withContext: boolean
 
@@ -5,11 +7,11 @@ export abstract class AbstractTypeBuilder {
     this.withContext = !!withContext
   }
 
-  abstract define(): string
-  abstract inline(): string
+  abstract typeDeclaration(): string
+  abstract inlineInvocation(): string
   // abstract invoke(): string;
   // protected abstract name(): string
 
-  protected abstract makeBody({ withContext, withComments }: { withContext: boolean; withComments: boolean }): string
-  protected abstract get name(): string
+  protected abstract makeLaxBody({ withContext, withComments }: WITH_CONTEXT & WITH_COMMENTS): string
+  protected abstract get laxName(): string
 }

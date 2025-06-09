@@ -78,12 +78,13 @@ export type ReTypeError<
 
 export type GENERIC_ERROR = {
   __type: keyof ErrorsLookup
-  __message?: ErrorsLookup[keyof ErrorsLookup]["msg"]
-  __url?: string
-  __context?: string
+  __message: ErrorsLookup[keyof ErrorsLookup]["msg"]
+  __url: ErrorsLookup[keyof ErrorsLookup]["url"]
+  __context: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  __value?: any
+  __value: any
 }
+
 export type NonErrorObj = object & {
   __message: never
   __url: never

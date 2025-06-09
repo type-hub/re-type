@@ -1,7 +1,8 @@
-import { ParsedTypeDeclaration, SafeOmit } from "../types"
+import { SafeOmit } from "../../typeUtils"
+import { PARSED_TYPE_DECLARATION } from "../typeParser"
 
 export class JSDocGenerator {
-  public document({ name, generics }: SafeOmit<ParsedTypeDeclaration, "body">) {
+  public document({ name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) {
     const params = generics.map((generic) => {
       return `@template ${generic.name} - ${generic.constraint ? `${generic.constraint}` : "any"}`
     })

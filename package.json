@@ -7,10 +7,9 @@
     "test": "vitest run",
     "test:tsc": "tsc --noEmit",
     "test:watch": "vitest",
-    "build:graph": "npx depcruise src/classses/Lax --include-only src --output-type dot | dot -T svg | npx depcruise-wrap-stream-in-html > index.html",
-    "build:graph:watch": "nodemon --watch src --exec \"npm run build:graph && npm run serve:graph\"",
-    "serve:graph": "http-server",
-    "watch:graph": "concurrently \"npm run build:graph:watch\" \"npm run serve:graph\""
+    "graph:build": "depcruise src/classses/Lax --include-only src --output-type dot | dot -T svg | depcruise-wrap-stream-in-html > index.html",
+    "graph:watch": "nodemon --watch src --ext ts --exec \"npm run graph:build\"",
+    "graph:serve": "concurrently \"npm run graph:watch\" \"vite\""
   },
   "keywords": [],
   "author": "",
@@ -22,7 +21,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.1.2"
+    "vitest": "^3.1.2",
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "@eslint/js": "^9.25.1",

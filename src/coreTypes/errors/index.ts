@@ -1,5 +1,7 @@
+import { ValueOf } from "../../typeUtils"
 import { Trace } from "../trace"
-import { ValueOf } from "../utils"
+
+export * from "./utils"
 
 // TODO: add branding
 // declare const __brand: unique symbol
@@ -75,20 +77,6 @@ export type ReTypeError<
   __constraint?: Constraint & {} // TODO: pretty
   __url: ErrorsLookup[_ErrorType]["url"]
 }
-
-export type GENERIC_ERROR = {
-  __type: keyof ErrorsLookup
-  __message: ErrorsLookup[keyof ErrorsLookup]["msg"]
-  __url: ErrorsLookup[keyof ErrorsLookup]["url"]
-  __context: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  __value: any
-}
-
-export type NonErrorObj = object & {
-  __message: never
-  __url: never
-} // type: GenericError
 
 // -----------------------
 

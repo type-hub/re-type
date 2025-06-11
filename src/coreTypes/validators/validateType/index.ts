@@ -1,8 +1,10 @@
+// DEAD CODE
+
+import type { VALIDATOR_MODES } from ".."
 import type { If$ } from "../../conditionals"
 import type { ReTypeError } from "../../errors"
-import { FilterError$ } from "../../filters"
+import { FilterError_DIST_US } from "../../errors/utils"
 import { Trace } from "../../trace"
-import type { VALIDATOR_MODES } from "../../validators"
 
 type _ValidateType<
   CX extends string,
@@ -37,7 +39,7 @@ export type ValidateType$<
 > = SafeChain<
   CX,
   "never",
-  FilterError$<T$>,
+  FilterError_DIST_US<T$>,
   T$,
   Match
 >
@@ -49,7 +51,7 @@ export type EitherValidate_Type$<T$, Match> =
   SafeChain<
     "CX",
     "either",
-    FilterError$<T$>,
+    FilterError_DIST_US<T$>,
     T$,
     Match
   >

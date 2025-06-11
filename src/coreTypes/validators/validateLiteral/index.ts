@@ -1,10 +1,10 @@
+import type { VALIDATOR_MODES } from ".."
 import type { If$ } from "../../conditionals"
 import type {
   MismatchError,
   NonLiteralError,
 } from "../../errors"
-import { FilterError$ } from "../../filters"
-import type { VALIDATOR_MODES } from "../../validators"
+import { FilterError_DIST_US } from "../../errors/utils"
 
 export type ValidateLiteral$<
   Mode extends VALIDATOR_MODES,
@@ -32,7 +32,7 @@ type Configure<
 > = SafeChain<
   //
   Mode,
-  FilterError$<T$>,
+  FilterError_DIST_US<T$>,
   T$,
   Match
 >

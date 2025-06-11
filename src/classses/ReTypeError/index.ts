@@ -1,4 +1,4 @@
-import { ERROR_TYPE, ERRORS_LOOKUP, ErrorsLookup, ErrorType, ReTypeError } from "../../types/errors"
+import { ERROR_TYPE, ERRORS_LOOKUP, ErrorsLookup, ErrorType, ReTypeError } from "../../coreTypes/errors"
 import { SafeOmit } from "../../typeUtils"
 import { GENERIC } from "../utils/parseTypeDeclarations"
 import { trace, TraceProps } from "./trace"

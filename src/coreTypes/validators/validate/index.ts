@@ -5,15 +5,15 @@ import type {
   NeverError,
   UnknownError,
 } from "../../errors"
-import { IsError_ } from "../../predicates"
+import { AnyMatchError_DIST_US } from "../../errors/utils"
 import { Trace } from "../../trace"
-import type { VALIDATOR_MODES } from "../../validators"
+import { VALIDATOR_MODES } from "../consts"
 
 type ValidateArr<
   Data extends unknown[],
   Acc,
   CX extends string,
-  Index extends any[] = [],
+  Index extends any[] = []
 > = [Data] extends [[infer First, ...infer Rest]]
   ? ValidateArr<
       Rest,
@@ -38,25 +38,30 @@ type Name = "CoreValidate$"
 type CoreValidate$<
   T,
   EitherMode extends VALIDATOR_MODES,
-  CX extends string,
-> = [T] extends [never]
-  ? NeverError<Trace<CX, Name>, T>
-  : 0 extends 1 & T
+  CX extends string
+> =
+  // never
+  [T] extends [never]
+    ? NeverError<Trace<CX, Name>, T>
+    : // any
+    0 extends 1 & T
     ? AnyError<Trace<CX, Name>, T>
-    : [unknown] extends [T]
-      ? //prettier-ignore
-        UnknownError<Trace<CX, Name>, T>
-      : [T] extends [any[]]
-        ? ValidateArr<
-            T,
-            never,
-            Trace<CX, Name, "ValidateArr">
-          >
-        : IsError_<T> extends true
-          ? T // error bypass
-          : EitherMode extends "either"
-            ? T
-            : never
+    : // unknown
+    [unknown] extends [T]
+    ? //prettier-ignore
+      UnknownError<Trace<CX, Name>, T>
+    : // array mode
+    [T] extends [any[]]
+    ? ValidateArr<
+        T,
+        never,
+        Trace<CX, Name, "ValidateArr">
+      >
+    : AnyMatchError_DIST_US<T> extends true
+    ? T // error bypass
+    : EitherMode extends "either"
+    ? T
+    : never
 
 // -----------------------------------------------------
 
@@ -65,7 +70,7 @@ type CoreValidate$<
  */
 export type Validate$<
   T,
-  CX extends string = "",
+  CX extends string = ""
 > = CoreValidate$<
   //
   T,
@@ -78,7 +83,7 @@ export type Validate$<
  */
 export type EitherValidate<
   T,
-  CX extends string = "",
+  CX extends string = ""
 > = CoreValidate$<
   T,
   "either",
@@ -88,14 +93,20 @@ export type EitherValidate<
 
 // -----------------------------------------------------
 
-type A = Validate$<never, "Test">
-type B = Validate$<any, "Test">
-type C = Validate$<unknown, "Test">
-type E = Validate$<never[], "Test">
-//   ^?
+type A = ValidateArr<[1, never], never, "Test">
 //   ^?
 
+type B = ValidateArr<[1, any], never, "Test">
 //   ^?
+
+type C = ValidateArr<[1, unknown], never, "Test">
+//   ^?
+
+type E = ValidateArr<[1, never], never, "Test">
+//   ^?
+
+// -----------------------------------------------------
+
 // type FF = ValidateAll$<[any]>
 //   ^?
 

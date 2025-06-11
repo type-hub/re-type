@@ -356,19 +356,21 @@ module.exports = {
             fontcolor: "white",
             fillcolor: "transparent",
             splines: "ortho",
+            rankdir: "TB",
             // shape: "folder",
-
-            cluster: {
-              // shape: "folder",
-              //   style: "filled,dashed",
-              //   color: "#888888", // border color
-              //   fillcolor: "#2e2e2e", // background color
-              //   fontcolor: "#ffffff",
-              //   fontsize: 10,
-              //   fontname: "Helvetica",
-              //   penwidth: 1.5, // border thickness
-            },
           },
+          modules: [
+            {
+              criteria: { source: "classses/utils" },
+              attributes: { fillcolor: "#26C6DA", fontcolor: "black" },
+            },
+          ],
+          dependencies: [
+            {
+              criteria: { resolved: "classses/utils" },
+              attributes: { color: "#26C6DA" },
+            },
+          ],
           edge: {
             arrowhead: "vee",
             arrowsize: "0.5",

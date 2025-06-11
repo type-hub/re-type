@@ -1,7 +1,7 @@
 import { GENERIC } from "../parseTypeDeclarations"
 
 // TODO: possibly ./class/consts
-export const CONTEXT = "Context" as const
+export const CONTEXT = "_Context" as const
 // export const CONTEXT_DECLARATION = `${CONTEXT} extends string` as const
 export const CONTEXT_GENERIC = {
   name: CONTEXT,

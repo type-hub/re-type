@@ -1,5 +1,5 @@
 import { prop } from "ramda"
-import { AbstractTypeBuilder } from "../abstract"
+import { AbstractTypeBuilder } from "../Abstract"
 import { Templater } from "../Templater"
 import { TypeBuilder } from "../TypeBuilder"
 import { WITH_COMMENTS, WITH_CONTEXT } from "../types"

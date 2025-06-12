@@ -1,15 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type {
-  AnyError,
-  NeverError,
-  UnknownError,
-} from "../../errors"
-import { AnyMatchError_DIST_US } from "../../errors/utils"
 import { Trace } from "../../trace"
-import { VALIDATOR_MODES } from "../consts"
+import { SingleMemberValidate$ } from "../singleMemberValidate"
+import { ValidateComputedGenerics } from "../validateComputedGenerics"
 
-type ValidateArr<
+type ValidateArr_ORG<
   Data extends unknown[],
   Acc,
   CX extends string,
@@ -18,9 +13,8 @@ type ValidateArr<
   ? ValidateArr<
       Rest,
       | Acc
-      | CoreValidate$<
+      | SingleMemberValidate$<
           First,
-          "never",
           Trace<CX, `[${Index["length"]}]`>
         >,
       CX,
@@ -28,40 +22,102 @@ type ValidateArr<
     >
   : Acc
 
-type Test = Validate$<
+type Test_ValidateArr_ORG = ValidateArr_ORG<
   [1, "a", any, true, never, false],
+  never,
   "Test"
 >
 
-type Name = "CoreValidate$"
+// -------------------------
+// Working
+// - single error return
+// -------------------------
 
-type CoreValidate$<
-  T,
-  EitherMode extends VALIDATOR_MODES,
-  CX extends string
-> =
-  // never
-  [T] extends [never]
-    ? NeverError<Trace<CX, Name>, T>
-    : // any
-    0 extends 1 & T
-    ? AnyError<Trace<CX, Name>, T>
-    : // unknown
-    [unknown] extends [T]
-    ? //prettier-ignore
-      UnknownError<Trace<CX, Name>, T>
-    : // array mode
-    [T] extends [any[]]
-    ? ValidateArr<
-        T,
-        never,
-        Trace<CX, Name, "ValidateArr">
-      >
-    : AnyMatchError_DIST_US<T> extends true
-    ? T // error bypass
-    : EitherMode extends "either"
-    ? T
-    : never
+type EitherContinueValidation<
+  _Error,
+  Args extends unknown[],
+  Context extends string,
+  Index extends any[] = []
+> = [_Error] extends [never]
+  ? ValidateArrWthStop_Index<
+      Args,
+      Context,
+      [...Index, any]
+    >
+  : _Error
+
+// prettier-ignore
+type ValidateArrWthStop_Index<
+  Args extends unknown[],
+  Context extends string,
+  Index extends any[] = []
+> = [Args] extends [[infer FirstArg, ...infer RestArgs]]
+  // upstream computation
+  ? EitherContinueValidation<
+      SingleMemberValidate$<
+        FirstArg,
+        Trace<Context, `[${Index["length"]}]`>
+      >,
+      RestArgs,
+      Context,
+      [...Index, any]
+    >
+  // no errors
+  : never
+
+type TestForErrors = ValidateArrWthStop_Index<
+  [1, any, unknown, never],
+  "Test"
+>
+type Swap = TestForErrors
+//   ^?
+
+// -----------------------------------------------------
+
+type TestForErrorsObj<
+  Context extends string,
+  A,
+  B,
+  C,
+  D
+> = ValidateComputedGenerics<
+  Context,
+  // TODO: should be generated
+  { A: A; B: B; C: C; D: D }
+>
+
+// TESTS --------------------------------------------------
+
+type SwapObj = TestForErrorsObj<
+  "Test",
+  1,
+  any,
+  unknown,
+  never
+>
+
+type SwapObjFinal = SwapObj
+//   ^?
+
+// -----------------------------------------------------
+
+type ValidateArr<
+  Data extends unknown[],
+  Acc,
+  Context extends string,
+  Index extends any[] = []
+> = [Data] extends [[infer First, ...infer Rest]]
+  ? ValidateArr<
+      Rest,
+      | Acc
+      | SingleMemberValidate$<
+          First,
+          Trace<Context, `[${Index["length"]}]`>
+        >,
+      Context,
+      [...Index, any]
+    >
+  : Acc
 
 // -----------------------------------------------------
 
@@ -71,12 +127,17 @@ type CoreValidate$<
 export type Validate$<
   T,
   CX extends string = ""
-> = CoreValidate$<
-  //
+> = SingleMemberValidate$<
   T,
-  "never",
   Trace<CX, "Validate$">
 >
+
+type Test = Validate$<
+  [1, "a", any, true, never, false],
+  "Test"
+>
+
+// -----------------------------------------------------
 
 /**
  * @returns Error | T
@@ -84,31 +145,8 @@ export type Validate$<
 export type EitherValidate<
   T,
   CX extends string = ""
-> = CoreValidate$<
+> = SingleMemberValidate$<
   T,
-  "either",
-  Trace<CX, "EitherValidate">
+  Trace<CX, "EitherValidate">,
+  "bypass-on"
 >
-// TODO: fix context for validation (func index, just - to curry context)
-
-// -----------------------------------------------------
-
-type A = ValidateArr<[1, never], never, "Test">
-//   ^?
-
-type B = ValidateArr<[1, any], never, "Test">
-//   ^?
-
-type C = ValidateArr<[1, unknown], never, "Test">
-//   ^?
-
-type E = ValidateArr<[1, never], never, "Test">
-//   ^?
-
-// -----------------------------------------------------
-
-// type FF = ValidateAll$<[any]>
-//   ^?
-
-// type Z = IsError_<F>
-//   ^?

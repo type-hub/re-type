@@ -1,4 +1,4 @@
-import type { VALIDATOR_MODES } from ".."
+import type { BYPASS_MODES } from ".."
 import type { If$ } from "../../conditionals"
 import type {
   MismatchError,
@@ -7,7 +7,7 @@ import type {
 import { FilterError_DIST_US } from "../../errors/utils"
 
 export type ValidateLiteral$<
-  Mode extends VALIDATOR_MODES,
+  Mode extends BYPASS_MODES,
   T,
   Match
 > = [T] extends [Match]
@@ -17,7 +17,7 @@ export type ValidateLiteral$<
   : MismatchError<"_ValidateLiteral", T>
 
 type SafeChain<
-  Mode extends VALIDATOR_MODES,
+  Mode extends BYPASS_MODES,
   E,
   T,
   Match
@@ -26,7 +26,7 @@ type SafeChain<
   : E
 
 type Configure<
-  Mode extends VALIDATOR_MODES,
+  Mode extends BYPASS_MODES,
   T$,
   Match
 > = SafeChain<
@@ -43,7 +43,7 @@ type Configure<
  * @returns Error | never
  */
 export type Validate_StringLiteral<T> = Configure<
-  "never",
+  "bypass-off",
   T,
   string
 >
@@ -52,7 +52,7 @@ export type Validate_StringLiteral<T> = Configure<
  * @returns Error | never
  */
 export type Validate_NumberLiteral<T> = Configure<
-  "never",
+  "bypass-off",
   T,
   number
 >
@@ -61,22 +61,22 @@ export type Validate_NumberLiteral<T> = Configure<
  * @returns Error | never
  */
 export type Validate_BooleanLiteral<T> =
-  Configure<"never", T, boolean>
+  Configure<"bypass-off", T, boolean>
 
 /**
  * @returns Error | T
  */
 export type EitherValidate_StringLiteral<T> =
-  Configure<"either", T, string>
+  Configure<"bypass-on", T, string>
 
 /**
  * @returns Error | T
  */
 export type EitherValidate_NumberLiteral<T> =
-  Configure<"either", T, number>
+  Configure<"bypass-on", T, number>
 
 /**
  * @returns Error | T
  */
 export type EitherValidate_BooleanLiteral<T> =
-  Configure<"either", T, boolean>
+  Configure<"bypass-on", T, boolean>

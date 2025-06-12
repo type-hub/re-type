@@ -1,10 +1,10 @@
-import type { VALIDATOR_MODES } from ".."
+import type { BYPASS_MODES } from ".."
 import type { If$ } from "../../conditionals"
 import type { EmptyStringError } from "../../errors"
 import { FilterError_DIST_US } from "../../errors/utils"
 
 type _ValidateEmptyString<
-  Mode extends VALIDATOR_MODES,
+  Mode extends BYPASS_MODES,
   T,
   CX extends string = "_ValidateEmptyString"
 > = T extends ""
@@ -12,7 +12,7 @@ type _ValidateEmptyString<
   : If$<Mode, "either", T>
 
 type SafeChain<
-  Mode extends VALIDATOR_MODES,
+  Mode extends BYPASS_MODES,
   E,
   Str
 > = [E] extends [never]
@@ -23,7 +23,7 @@ type SafeChain<
  * @returns Error | never
  */
 export type ValidateEmptyString$<T> = SafeChain<
-  "never",
+  "bypass-off",
   FilterError_DIST_US<T>,
   T
 >
@@ -34,7 +34,7 @@ export type ValidateEmptyString$<T> = SafeChain<
 export type EitherValidate_EmptyString$<T> =
   SafeChain<
     //
-    "either",
+    "bypass-on",
     FilterError_DIST_US<T>,
     T
   >

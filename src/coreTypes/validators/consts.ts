@@ -1,1 +1,3 @@
-export type VALIDATOR_MODES = "never" | "either"
+export type BYPASS_MODES =
+  | "bypass-off"
+  | "bypass-on"

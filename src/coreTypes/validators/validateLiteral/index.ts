@@ -4,7 +4,7 @@ import type {
   MismatchError,
   NonLiteralError,
 } from "../../errors"
-import { FilterError_DIST_US } from "../../errors/utils"
+import { FilterError$ } from "../../errors/utils"
 
 export type ValidateLiteral$<
   Mode extends BYPASS_MODES,
@@ -32,7 +32,7 @@ type Configure<
 > = SafeChain<
   //
   Mode,
-  FilterError_DIST_US<T$>,
+  FilterError$<T$>,
   T$,
   Match
 >

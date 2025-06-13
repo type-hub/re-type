@@ -3,7 +3,7 @@
 import type { BYPASS_MODES } from ".."
 import type { If$ } from "../../conditionals"
 import type { ReTypeError } from "../../errors"
-import { FilterError_DIST_US } from "../../errors/utils"
+import { FilterError$ } from "../../errors/utils"
 import { Trace } from "../../trace"
 
 type _ValidateType<
@@ -39,7 +39,7 @@ export type ValidateType$<
 > = SafeChain<
   CX,
   "bypass-off",
-  FilterError_DIST_US<T$>,
+  FilterError$<T$>,
   T$,
   Match
 >
@@ -51,7 +51,7 @@ export type EitherValidate_Type$<T$, Match> =
   SafeChain<
     "CX",
     "bypass-on",
-    FilterError_DIST_US<T$>,
+    FilterError$<T$>,
     T$,
     Match
   >

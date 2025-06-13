@@ -5,7 +5,7 @@ import {
   UnionToArray,
 } from "../../../typeUtils"
 import { Trace } from "../../trace"
-import { SingleMemberValidate$ } from "../singleMemberValidate"
+import { _FlatValidate$ } from "../flatValidate"
 
 type Either_ValidateObjWithStop<
   _Error,
@@ -25,9 +25,9 @@ Context extends string,
   ? FirstKey extends keyof ArgsLookup & string
   // upstream computation
   ? Either_ValidateObjWithStop<
-    SingleMemberValidate$<
+    _FlatValidate$<
           ArgsLookup[FirstKey],
-          Trace<Context, FirstKey>
+          Trace<Context, `Arg:${FirstKey}`>
         >,
       Context,
       ArgsLookup,

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Trace } from "../../trace"
-import { SingleMemberValidate$ } from "../singleMemberValidate"
+import { _FlatValidate$ } from "../flatValidate"
 import { ValidateComputedGenerics } from "../validateComputedGenerics"
 
 type ValidateArr_ORG<
@@ -13,7 +13,7 @@ type ValidateArr_ORG<
   ? ValidateArr<
       Rest,
       | Acc
-      | SingleMemberValidate$<
+      | _FlatValidate$<
           First,
           Trace<CX, `[${Index["length"]}]`>
         >,
@@ -27,50 +27,6 @@ type Test_ValidateArr_ORG = ValidateArr_ORG<
   never,
   "Test"
 >
-
-// -------------------------
-// Working
-// - single error return
-// -------------------------
-
-type EitherContinueValidation<
-  _Error,
-  Args extends unknown[],
-  Context extends string,
-  Index extends any[] = []
-> = [_Error] extends [never]
-  ? ValidateArrWthStop_Index<
-      Args,
-      Context,
-      [...Index, any]
-    >
-  : _Error
-
-// prettier-ignore
-type ValidateArrWthStop_Index<
-  Args extends unknown[],
-  Context extends string,
-  Index extends any[] = []
-> = [Args] extends [[infer FirstArg, ...infer RestArgs]]
-  // upstream computation
-  ? EitherContinueValidation<
-      SingleMemberValidate$<
-        FirstArg,
-        Trace<Context, `[${Index["length"]}]`>
-      >,
-      RestArgs,
-      Context,
-      [...Index, any]
-    >
-  // no errors
-  : never
-
-type TestForErrors = ValidateArrWthStop_Index<
-  [1, any, unknown, never],
-  "Test"
->
-type Swap = TestForErrors
-//   ^?
 
 // -----------------------------------------------------
 
@@ -88,6 +44,7 @@ type TestForErrorsObj<
 
 // TESTS --------------------------------------------------
 
+// TODO: shouldn't context be last (placeholder value support?
 type SwapObj = TestForErrorsObj<
   "Test",
   1,
@@ -110,7 +67,7 @@ type ValidateArr<
   ? ValidateArr<
       Rest,
       | Acc
-      | SingleMemberValidate$<
+      | _FlatValidate$<
           First,
           Trace<Context, `[${Index["length"]}]`>
         >,
@@ -127,10 +84,7 @@ type ValidateArr<
 export type Validate$<
   T,
   CX extends string = ""
-> = SingleMemberValidate$<
-  T,
-  Trace<CX, "Validate$">
->
+> = _FlatValidate$<T, Trace<CX, "Validate$">>
 
 type Test = Validate$<
   [1, "a", any, true, never, false],
@@ -145,7 +99,7 @@ type Test = Validate$<
 export type EitherValidate<
   T,
   CX extends string = ""
-> = SingleMemberValidate$<
+> = _FlatValidate$<
   T,
   Trace<CX, "EitherValidate">,
   "bypass-on"

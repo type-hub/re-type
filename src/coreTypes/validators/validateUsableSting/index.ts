@@ -1,4 +1,4 @@
-import { FilterError_DIST_US } from "../../errors/utils"
+import { FilterError$ } from "../../errors/utils"
 import type { EitherValidate } from "../validate"
 import type { EitherValidate_EmptyString$ } from "../validateEmtpyString"
 import type { EitherValidate_StringLiteral } from "../validateLiteral"
@@ -19,12 +19,12 @@ type Check<T> =
  * @returns Error | never
  */
 export type ValidateUsableSting$<T> =
-  FilterError_DIST_US<Check<T>>
+  FilterError$<Check<T>>
 
 /**
  * @returns Error | T
  */
 export type CH_ValidateUsableSting$<T> =
-  FilterError_DIST_US<Check<T>>
+  FilterError$<Check<T>>
 
 // type X = ValidateUsableSting$<never>

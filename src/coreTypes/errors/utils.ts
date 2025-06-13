@@ -18,10 +18,10 @@ T extends {
   [key: string]: any
 }
 */
-export type AnyMatchError_DIST_US<T> =
+export type AnyMatchError$<T> =
   T extends GENERIC_ERROR ? true : never
 
-export type FilterError_DIST_US<T> =
+export type FilterError$<T> =
   T extends GENERIC_ERROR ? T : never
 
 // TESTS -----------------------------------------------------------------
@@ -32,11 +32,11 @@ type TestError = NeverError<
 >
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type A = AnyMatchError_DIST_US<TestError | "">
+type A = AnyMatchError$<TestError | "">
 //   ^?
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type X = FilterError_DIST_US<TestError | "">
+type X = FilterError$<TestError | "">
 //   ^?
 
 // type Z = ValidateAny$<TestError | "">

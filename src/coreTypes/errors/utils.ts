@@ -1,4 +1,7 @@
-import { ErrorsLookup, NeverError } from "."
+import {
+  ErrorsLookup,
+  NeverError,
+} from "./errors"
 
 export type GENERIC_ERROR = {
   __type: keyof ErrorsLookup

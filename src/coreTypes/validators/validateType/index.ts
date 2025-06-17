@@ -1,7 +1,9 @@
 // DEAD CODE
 
-import type { BYPASS_MODES } from ".."
-import type { If$ } from "../../conditionals"
+import type {
+  BYPASS_MODES,
+  BypassModes,
+} from ".."
 import type { ReTypeError } from "../../errors"
 import { FilterError$ } from "../../errors/utils"
 import { Trace } from "../../trace"
@@ -12,7 +14,9 @@ type _ValidateType<
   T,
   Match
 > = [T] extends [Match]
-  ? If$<Mode, "either", T>
+  ? Mode extends BypassModes["on"]
+    ? T
+    : never
   : ReTypeError<
       "MismatchError",
       Trace<CX, "_ValidateType">,
@@ -38,7 +42,7 @@ export type ValidateType$<
   Match
 > = SafeChain<
   CX,
-  "bypass-off",
+  BypassModes["off"],
   FilterError$<T$>,
   T$,
   Match
@@ -50,7 +54,7 @@ export type ValidateType$<
 export type EitherValidate_Type$<T$, Match> =
   SafeChain<
     "CX",
-    "bypass-on",
+    BypassModes["on"],
     FilterError$<T$>,
     T$,
     Match

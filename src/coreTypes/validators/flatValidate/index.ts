@@ -7,7 +7,10 @@ import {
   UnknownError,
 } from "../../errors"
 import { Trace } from "../../trace"
-import { BYPASS_MODES } from "../consts"
+import {
+  BYPASS_MODES,
+  BypassModes,
+} from "../consts"
 
 type Name = "CoreValidate$"
 
@@ -15,7 +18,7 @@ type Name = "CoreValidate$"
 export type _FlatValidate$<
   T,
   CX extends string,
-  BypassMode extends BYPASS_MODES = "bypass-off"
+  BypassMode extends BYPASS_MODES = BypassModes["off"]
   // TODO: fix union issue
   // BypassMode extends 'bypass-on' = never
 > =
@@ -30,7 +33,7 @@ export type _FlatValidate$<
     ? UnknownError<Trace<CX, Name>, T>
     : // errors
     AnyMatchError$<T> extends never
-    ? BypassMode extends "bypass-off"
+    ? BypassMode extends BypassModes["off"]
       ? never // good
         // possible arr, obj check for errors required
         // ? T extends any[]

@@ -1,15 +1,19 @@
-import type { BYPASS_MODES } from ".."
-import type { If$ } from "../../conditionals"
+import type {
+  BYPASS_MODES,
+  BypassModes,
+} from ".."
 import type { EmptyStringError } from "../../errors"
 import { FilterError$ } from "../../errors/utils"
 
 type _ValidateEmptyString<
-  Mode extends BYPASS_MODES,
+  Bypass extends BYPASS_MODES,
   T,
   CX extends string = "_ValidateEmptyString"
 > = T extends ""
   ? EmptyStringError<CX, T> // TODO: TX
-  : If$<Mode, "either", T>
+  : Bypass extends BypassModes["on"]
+  ? T
+  : never
 
 type SafeChain<
   Mode extends BYPASS_MODES,
@@ -23,7 +27,7 @@ type SafeChain<
  * @returns Error | never
  */
 export type ValidateEmptyString$<T> = SafeChain<
-  "bypass-off",
+  BypassModes["off"],
   FilterError$<T>,
   T
 >
@@ -34,7 +38,7 @@ export type ValidateEmptyString$<T> = SafeChain<
 export type EitherValidate_EmptyString$<T> =
   SafeChain<
     //
-    "bypass-on",
+    BypassModes["on"],
     FilterError$<T>,
     T
   >

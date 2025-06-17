@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Trace } from "../../trace"
+import { BypassModes } from "../consts"
 import { _FlatValidate$ } from "../flatValidate"
 import { ValidateComputedGenerics } from "../validateComputedGenerics"
 
@@ -102,5 +103,5 @@ export type EitherValidate<
 > = _FlatValidate$<
   T,
   Trace<CX, "EitherValidate">,
-  "bypass-on"
+  BypassModes["on"]
 >

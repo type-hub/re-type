@@ -48,9 +48,10 @@ export type ValidateArr$<
 > = [Args] extends [
   [infer FirstArg, ...infer RestArgs] // TODO: add rest check for empty arr
 ]
-  ? FirstArg extends any[]
+  ? [FirstArg] extends [[infer U]]
+  // ? [FirstArg] extends [any[]]
     // upstream computation
-    ? ValidateArr$<FirstArg, Context, Index>
+    ? ValidateArr$<[U], Trace<Context, 'loopback'>, Index>
     // upstream computation
     : _EitherValidate$<
         _FlatValidate$<
@@ -74,13 +75,16 @@ type B = ValidateArr$<[1], "Test">
 //   ^?
 
 // prettier-ignore
-type C = ValidateArr$<[1, any, unknown, never],"Test">
+type C = ValidateArr$<[1, any, unknown, never], "Test">
+//   ^?
+
+type D = ValidateArr$<[C], "Test">
 //   ^?
 
 // prettier-ignore
-type D = ValidateArr$<[[any]],"Test">
+type E = ValidateArr$<[[any]],"Test">
 //   ^?
 
 // prettier-ignore
-type E = ValidateArr$<[1, [any]],"Test">
+type F = ValidateArr$<[1, [any]], "Test">
 //   ^?

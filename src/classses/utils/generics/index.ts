@@ -4,7 +4,11 @@ import { WITH_CONTEXT, WITH_ERROR } from "../../types"
 import { CONTEXT_GENERIC, ERROR_GENERIC } from "../consts"
 import { GENERIC, PARSED_TYPE_DECLARATION } from "../parseTypeDeclarations"
 
-type ResolveGenericProps = Partial<WITH_CONTEXT> & Partial<WITH_ERROR> & SafePick<PARSED_TYPE_DECLARATION, "generics">
+// prettier-ignore
+type ResolveGenericProps =
+  & Partial<WITH_CONTEXT>
+  & Partial<WITH_ERROR>
+  & SafePick<PARSED_TYPE_DECLARATION, "generics">
 
 export const resolveGenerics = ({ withError, withContext, generics }: ResolveGenericProps): GENERIC[] =>
   match([withError || false, withContext || false])

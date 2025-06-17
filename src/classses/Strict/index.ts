@@ -1,5 +1,4 @@
 import { Templater } from "../Templater"
-import { TypeBuilder } from "../TypeBuilder"
 import { WITH_COMMENTS, WITH_CONTEXT } from "../types"
 import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "../utils/parseTypeDeclarations"
 
@@ -16,7 +15,6 @@ export class Strict {
     //
     typeDef: string,
     private templater: Templater,
-    private typeBuilder: TypeBuilder,
     withContext?: boolean,
   ) {
     this.withContext = !!withContext

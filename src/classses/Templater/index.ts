@@ -4,6 +4,7 @@ import { WITH_CONTEXT } from "../types"
 import { createJsDocs } from "../utils/createJsDocs"
 import { resolveGenerics } from "../utils/generics"
 import { PARSED_TYPE_DECLARATION } from "../utils/parseTypeDeclarations"
+import { Either } from "./either"
 
 type InlineTemplateData = {
   name: string
@@ -11,7 +12,7 @@ type InlineTemplateData = {
 }
 
 export class Templater {
-  constructor(private typeBuilder: TypeBuilder) {}
+  constructor(private typeBuilder: TypeBuilder, private either: Either) {}
 
   // declaration yes, invocation no, still missing
 
@@ -50,44 +51,11 @@ export class Templater {
   // class?
 
   public eitherTypeDeclaration({ name, generics: _generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) {
-    const genericsWithoutError = resolveGenerics({ withContext: true, generics: _generics })
-    const typeInvocation = this.typeBuilder.createTypeInvocation({ name, generics: genericsWithoutError })
-
-    const typeName = `Either_${name}`
-
-    const typeDef = `[_Error] extends [never]
-  ? ${typeInvocation}
-  : _Error`
-
-    const generics = resolveGenerics({ withContext: true, withError: true, generics: _generics })
-    const docs = createJsDocs({ name: typeName, generics })
-
-    return this.typeBuilder.createTypeDeclaration({
-      docs,
-      name: typeName,
-      genericsDeclarations: this.typeBuilder.createGenericArgsDeclaration({ generics, lax: true }), // remove lax, error and context should have validation
-      body: typeDef,
-    })
+    return this.either.eitherTypeDeclaration({ name, generics: _generics })
   }
 
   public eitherTypeInvocation({ name, generics: _generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) {
-    const generics = resolveGenerics({ withContext: true, generics: _generics })
-    const typeName = `Either_${name}_Lax`
-
-    const genericsInvocation = this.typeBuilder.createGenericArgsInvocation(generics)
-
-    // todo: resolve either name
-    const typeDef = `${typeName}<
-  Validate$<[${genericsInvocation}]>,
-  ${genericsInvocation},
->`
-
-    return typeDef
-
-    // return this.typeBuilder.createTypeInvocation({
-    //   name: typeName,
-    //   generics,
-    // })
+    return this.either.eitherTypeInvocation({ name, generics: _generics })
   }
 
   // do we need this one?

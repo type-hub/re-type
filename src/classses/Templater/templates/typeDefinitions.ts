@@ -1,8 +1,8 @@
 import { SafeOmit } from "../../../typeUtils"
 import { PARSED_TYPE_DECLARATION } from "../../utils/parseTypeDeclarations"
-import { createGenericArgsInvocation } from "./generics"
+import { genericArgsInvocation } from "./generics"
 
-export const createTypeDeclaration = ({
+export const typeDeclaration = ({
   docs,
   name,
   genericsDeclarations,
@@ -15,5 +15,5 @@ export const createTypeDeclaration = ({
 }): string => `${docs}
 type ${name}<${genericsDeclarations}> = ${body}`
 
-export const createTypeInvocation = ({ name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) =>
-  `${name}<${createGenericArgsInvocation(generics)}>`
+export const typeInvocation = ({ name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) =>
+  `${name}<${genericArgsInvocation(generics)}>`

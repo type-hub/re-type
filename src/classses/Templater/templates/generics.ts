@@ -1,9 +1,9 @@
 import { match, P } from "ts-pattern"
 import { GENERIC } from "../../utils/parseTypeDeclarations"
 
-export const createGenericArgsInvocation = (generics: GENERIC[]) => generics.map(({ name }) => name).join(", ")
+export const genericArgsInvocation = (generics: GENERIC[]) => generics.map(({ name }) => name).join(", ")
 
-export const createGenericArgsDeclaration = ({ generics, lax }: { generics: GENERIC[]; lax?: boolean }) =>
+export const genericArgsDeclaration = ({ generics, lax }: { generics: GENERIC[]; lax?: boolean }) =>
   generics
     .map((generic) => {
       return (

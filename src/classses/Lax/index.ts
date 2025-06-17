@@ -1,6 +1,7 @@
 import { prop } from "ramda"
 import { AbstractTypeBuilder } from "../Abstract"
 import { Templater } from "../Templater"
+import { template } from "../Templater/templates"
 import { TypeBuilder } from "../TypeBuilder"
 import { WITH_COMMENTS, WITH_CONTEXT } from "../types"
 import { resolveGenerics } from "../utils/generics"
@@ -69,7 +70,7 @@ export class Lax extends AbstractTypeBuilder {
       .reduce(
         //
         this.typeBuilder.convertGenericToConditional(this.laxName),
-        this.typeBuilder.createTypeInvocation({
+        template.typeInvocation({
           name,
           generics: resolveGenerics({ withContext, generics }),
         }),

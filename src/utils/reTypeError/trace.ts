@@ -1,4 +1,4 @@
-import { CONTEXT } from "../utils/consts"
+import { CONTEXT } from "utils/consts"
 import { uuid } from "./uuid"
 
 export type TraceProps = {

@@ -1,4 +1,5 @@
-import { WITH_COMMENTS, WITH_CONTEXT } from "../types"
+import { WITH_CONTEXT } from "utils/resolveGenerics"
+import { WITH_COMMENTS } from "../types"
 
 export abstract class AbstractTypeBuilder {
   protected withContext: boolean

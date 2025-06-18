@@ -1,11 +1,10 @@
 import { prop } from "ramda"
+import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "utils/parseTypeDeclarations"
+import { resolveGenerics, WITH_CONTEXT } from "utils/resolveGenerics"
+import { templater } from "utils/templater"
+import { typeBuilder } from "utils/templater/typeBuilder"
 import { AbstractTypeBuilder } from "../Abstract"
-import { Templater } from "../Templater"
-import { template } from "../Templater/templates"
-import { TypeBuilder } from "../TypeBuilder"
-import { WITH_COMMENTS, WITH_CONTEXT } from "../types"
-import { resolveGenerics } from "../utils/generics"
-import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "../utils/parseTypeDeclarations"
+import { WITH_COMMENTS } from "../types"
 
 export class Lax extends AbstractTypeBuilder {
   protected withContext: boolean
@@ -19,8 +18,6 @@ export class Lax extends AbstractTypeBuilder {
   constructor(
     //
     typeDef: string,
-    private templater: Templater,
-    private typeBuilder: TypeBuilder,
     withContext?: boolean,
   ) {
     super()
@@ -30,7 +27,7 @@ export class Lax extends AbstractTypeBuilder {
   }
 
   public typeDeclaration() {
-    return this.templater.laxTypeDeclaration({
+    return templater.lax.typeDeclaration({
       name: this.laxName,
       generics: this.parsedType.generics,
       body: this.makeLaxBody({ withContext: false, withComments: false }),
@@ -48,7 +45,7 @@ export class Lax extends AbstractTypeBuilder {
       parsedType: { generics },
     } = this
 
-    return this.templater.eitherTypeDeclaration({
+    return templater.either.typeDeclaration({
       name,
       generics,
     })
@@ -69,15 +66,15 @@ export class Lax extends AbstractTypeBuilder {
       .reverse()
       .reduce(
         //
-        this.typeBuilder.convertGenericToConditional(this.laxName),
-        template.typeInvocation({
+        typeBuilder.relaxConstraints(this.laxName),
+        typeBuilder.typeInvocation({
           name,
           generics: resolveGenerics({ withContext, generics }),
         }),
       )
 
     if (withComments) {
-      return this.templater.renderInline({
+      return templater.renderInline({
         name: this.laxName,
         body: conditionalTypeBody,
       })

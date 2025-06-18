@@ -1,5 +1,5 @@
-import { SafeOmit } from "../../../typeUtils"
-import { PARSED_TYPE_DECLARATION } from "../../utils/parseTypeDeclarations"
+import { SafeOmit } from "utilTypes"
+import { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
 import { genericArgsInvocation } from "./generics"
 
 export const typeDeclaration = ({

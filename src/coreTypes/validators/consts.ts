@@ -1,4 +1,4 @@
-import { ValueOf } from "../../typeUtils"
+import { ValueOf } from "../../utilTypes"
 
 export type BypassModes = {
   on: "bypass-on"

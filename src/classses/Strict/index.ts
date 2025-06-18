@@ -1,6 +1,7 @@
-import { Templater } from "../Templater"
-import { WITH_COMMENTS, WITH_CONTEXT } from "../types"
-import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "../utils/parseTypeDeclarations"
+import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "utils/parseTypeDeclarations"
+import { WITH_CONTEXT } from "utils/resolveGenerics"
+import { templater } from "utils/templater"
+import { WITH_COMMENTS } from "../types"
 
 export class Strict {
   protected withContext: boolean
@@ -14,7 +15,6 @@ export class Strict {
   constructor(
     //
     typeDef: string,
-    private templater: Templater,
     withContext?: boolean,
   ) {
     this.withContext = !!withContext
@@ -22,7 +22,7 @@ export class Strict {
   }
 
   public typeDeclaration() {
-    return this.templater.strictTypeDeclaration({
+    return templater.strict.typeDeclaration({
       name: this.strictName,
       generics: this.parsedType.generics,
       body: this.makeStrictBody({ withContext: false, withComments: false }),
@@ -40,7 +40,7 @@ export class Strict {
       parsedType: { generics },
     } = this
 
-    return this.templater.eitherTypeDeclaration({
+    return templater.either.typeDeclaration({
       name,
       generics,
     })
@@ -54,6 +54,6 @@ export class Strict {
     // todo: resolve either name
     // const typeDef = `Either_${this.parsedType.name}<
 
-    return this.templater.eitherTypeInvocation({ name: this.parsedType.name, generics })
+    return templater.either.typeInvocation({ name: this.parsedType.name, generics })
   }
 }

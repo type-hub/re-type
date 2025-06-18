@@ -1,14 +1,14 @@
-import { SafeOmit } from "../../../typeUtils"
-import { createJsDocs } from "../../utils/createJsDocs"
-import { resolveGenerics } from "../../utils/generics"
-import { PARSED_TYPE_DECLARATION } from "../../utils/parseTypeDeclarations"
-import { template } from "../templates"
+import { createJsDocs } from "utils/createJsDocs"
+import { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
+import { resolveGenerics } from "utils/resolveGenerics"
+import { SafeOmit } from "../../../utilTypes"
+import { typeBuilder } from "../typeBuilder"
 
 const resolveEitherName = (name: string) => `Either_${name}`
 
 const typeDeclaration = ({ name: _name, generics: _generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) => {
   const genericsWithoutError = resolveGenerics({ withContext: true, generics: _generics })
-  const typeInvocation = template.typeInvocation({ name: _name, generics: genericsWithoutError })
+  const typeInvocation = typeBuilder.typeInvocation({ name: _name, generics: genericsWithoutError })
 
   const name = resolveEitherName(_name)
   const body = `[_Error] extends [never]
@@ -17,10 +17,10 @@ const typeDeclaration = ({ name: _name, generics: _generics }: SafeOmit<PARSED_T
 
   const generics = resolveGenerics({ withContext: true, withError: true, generics: _generics })
 
-  return template.typeDeclaration({
+  return typeBuilder.typeDeclaration({
     docs: createJsDocs({ name: name, generics }),
     name: name,
-    genericsDeclarations: template.genericArgsDeclaration({ generics, lax: true }), // remove lax, error and context should have validation
+    genericsDeclarations: typeBuilder.genericArgsDeclaration({ generics, lax: true }), // remove lax, error and context should have validation
     body,
   })
 }
@@ -29,7 +29,7 @@ const typeInvocation = ({ name, generics: _generics }: SafeOmit<PARSED_TYPE_DECL
   const generics = resolveGenerics({ withContext: true, generics: _generics })
   const typeName = resolveEitherName(name)
 
-  const genericsInvocation = template.genericArgsInvocation(generics)
+  const genericsInvocation = typeBuilder.genericArgsInvocation(generics)
 
   const typeDef = `${typeName}<
   Validate$<[${genericsInvocation}]>,

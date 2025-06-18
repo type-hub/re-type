@@ -3,7 +3,7 @@
 import {
   DEAD_BRANCH,
   UnionToArray,
-} from "../../../typeUtils"
+} from "../../../utilTypes"
 import { Trace } from "../../trace"
 import { _FlatValidate$ } from "../flatValidate"
 

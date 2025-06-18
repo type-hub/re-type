@@ -8,6 +8,7 @@
     "test:tsc": "tsc --noEmit",
     "test:watch": "vitest",
     "graph:build": "depcruise src --include-only src --output-type dot | dot -T svg | depcruise-wrap-stream-in-html > index.html",
+    "graph:test": "depcruise src --include-only src",
     "graph:watch": "nodemon --watch src --ext ts --exec \"npm run graph:build\"",
     "graph:serve": "concurrently \"npm run graph:watch\" \"vite\""
   },

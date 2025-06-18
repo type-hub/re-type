@@ -1,4 +1,4 @@
-import { SafeOmit } from "../../../typeUtils"
+import { SafeOmit } from "utilTypes"
 import { PARSED_TYPE_DECLARATION } from "../parseTypeDeclarations"
 
 export const createJsDocs = ({ name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) => {

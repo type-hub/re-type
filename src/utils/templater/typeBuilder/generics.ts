@@ -1,5 +1,5 @@
 import { match, P } from "ts-pattern"
-import { GENERIC } from "../../utils/parseTypeDeclarations"
+import { GENERIC } from "utils/parseTypeDeclarations"
 
 export const genericArgsInvocation = (generics: GENERIC[]) => generics.map(({ name }) => name).join(", ")
 

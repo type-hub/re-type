@@ -2,6 +2,18 @@
 module.exports = {
   forbidden: [
     {
+      name: "no-classes-in-utils",
+      comment: "Utils directory should not import from classes directory",
+      severity: "error",
+      from: {
+        path: "^src/utils/",
+      },
+      to: {
+        path: "^src/classses/",
+      },
+    },
+    //
+    {
       name: "no-circular",
       severity: "warn",
       comment:
@@ -195,7 +207,7 @@ module.exports = {
     /* Which modules to exclusively include (array of regular expressions in strings)
        dependency-cruiser will skip everything not matching this pattern
     */
-    // includeOnly : [''],
+    includeOnly: ["src"],
 
     /* List of module systems to cruise.
        When left out dependency-cruiser will fall back to the list of _all_
@@ -342,7 +354,14 @@ module.exports = {
            collapses everything in node_modules to one folder deep so you see
            the external modules, but their innards.
          */
-        collapsePattern: "node_modules/(?:@[^/]+/[^/]+|[^/]+)",
+        // collapsePattern: "node_modules/(?:@[^/]+/[^/]+|[^/]+)",
+        // collapsePattern: "node_modules",
+
+        filters: {
+          includeOnly: {
+            path: "^src/",
+          },
+        },
 
         /* Options to tweak the appearance of your graph.See
            https://github.com/sverweij/dependency-cruiser/blob/main/doc/options-reference.md#reporteroptions
@@ -361,14 +380,30 @@ module.exports = {
           },
           modules: [
             {
-              criteria: { source: "classses/utils" },
+              criteria: { source: "utils" },
               attributes: { fillcolor: "#26C6DA", fontcolor: "black" },
+            },
+            {
+              criteria: { source: "classses" },
+              attributes: { fillcolor: "#EF5350", fontcolor: "black" },
+            },
+            {
+              criteria: { source: "coreTypes" },
+              attributes: { fillcolor: "#AB47BC", fontcolor: "black" },
             },
           ],
           dependencies: [
             {
-              criteria: { resolved: "classses/utils" },
+              criteria: { resolved: "utils" },
               attributes: { color: "#26C6DA" },
+            },
+            {
+              criteria: { resolved: "classses" },
+              attributes: { color: "#EF5350" },
+            },
+            {
+              criteria: { resolved: "coreTypes" },
+              attributes: { color: "#AB47BC" },
             },
           ],
           edge: {

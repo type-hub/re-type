@@ -1,4 +1,4 @@
-import { regexes } from "../../../regexes"
+import { regexes } from "regexes"
 
 export type GENERIC = {
   name: string

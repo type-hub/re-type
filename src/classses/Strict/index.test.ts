@@ -1,13 +1,11 @@
 import { describe, expect, it } from "vitest"
 import { Strict } from "."
-import { Templater } from "../Templater"
 
 describe("TypeParser", () => {
   it("should create relaxed variant", () => {
     const lax = new Strict(
       //
       "type Pick<A extends string, B extends number, C = 1> = A | B | C",
-      new Templater(),
       true,
     )
 

@@ -1,8 +1,11 @@
+// TODO: why imports from classes
 import { match } from "ts-pattern"
-import { SafePick } from "../../../typeUtils"
-import { WITH_CONTEXT, WITH_ERROR } from "../../types"
+import { SafePick } from "utilTypes"
 import { CONTEXT_GENERIC, ERROR_GENERIC } from "../consts"
 import { GENERIC, PARSED_TYPE_DECLARATION } from "../parseTypeDeclarations"
+
+export type WITH_CONTEXT = { withContext: boolean }
+export type WITH_ERROR = { withError: boolean }
 
 // prettier-ignore
 type ResolveGenericProps =

@@ -380,6 +380,10 @@ module.exports = {
           },
           modules: [
             {
+              criteria: { source: "services" },
+              attributes: { fillcolor: "#FFA726", fontcolor: "black" },
+            },
+            {
               criteria: { source: "utils" },
               attributes: { fillcolor: "#26C6DA", fontcolor: "black" },
             },
@@ -404,6 +408,10 @@ module.exports = {
             {
               criteria: { resolved: "coreTypes" },
               attributes: { color: "#AB47BC" },
+            },
+            {
+              criteria: { resolved: "services" },
+              attributes: { color: "#FFA726" },
             },
           ],
           edge: {

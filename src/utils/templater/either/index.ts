@@ -1,3 +1,4 @@
+import { ImportRegistry } from "services/ImportRegistry"
 import { createJsDocs } from "utils/createJsDocs"
 import { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
 import { resolveGenerics } from "utils/resolveGenerics"
@@ -26,13 +27,16 @@ const typeDeclaration = ({ name: _name, generics: _generics }: SafeOmit<PARSED_T
 }
 
 const typeInvocation = ({ name, generics: _generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">) => {
+  const Validate = "Validate$"
+  ImportRegistry.addImport(Validate)
+
   const generics = resolveGenerics({ withContext: true, generics: _generics })
   const typeName = resolveEitherName(name)
 
   const genericsInvocation = typeBuilder.genericArgsInvocation(generics)
 
   const typeDef = `${typeName}<
-  Validate$<[${genericsInvocation}]>,
+  ${Validate}<[${genericsInvocation}]>,
   ${genericsInvocation},
 >`
 

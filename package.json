@@ -10,7 +10,8 @@
     "graph:build": "depcruise src --include-only src --output-type dot | dot -T svg | depcruise-wrap-stream-in-html > index.html",
     "graph:test": "depcruise src --include-only src",
     "graph:watch": "nodemon --watch src --ext ts --exec \"npm run graph:build\"",
-    "graph:serve": "concurrently \"npm run graph:watch\" \"vite\""
+    "graph:serve": "concurrently \"npm run graph:watch\" \"vite\"",
+    "generate-type-mirror": "npx tsx src/scripts/generateTypeMirrorClass"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "@eslint/js": "^9.25.1",
+    "@types/node": "^24.0.3",
     "@types/ramda": "^0.30.2",
     "eslint-config-prettier": "^10.1.2",
     "globals": "^16.0.0",

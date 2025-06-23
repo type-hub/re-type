@@ -12,7 +12,7 @@ import {
   BypassModes,
 } from "../consts"
 
-type Name = "CoreValidate$"
+type Name = "FlatValidate$"
 
 // prettier-ignore
 export type _FlatValidate$<
@@ -31,8 +31,8 @@ export type _FlatValidate$<
     : // unknown
     [unknown] extends [T]
     ? UnknownError<Trace<CX, Name>, T>
-    : // errors
-    AnyMatchError$<T> extends never
+    : // errors, why brackets?
+    [AnyMatchError$<T>] extends [never]
     ? BypassMode extends BypassModes["off"]
       ? never // good
         // possible arr, obj check for errors required

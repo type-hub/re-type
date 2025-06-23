@@ -59,7 +59,7 @@ type SwapObjFinal = SwapObj
 
 // -----------------------------------------------------
 
-type ValidateArr<
+export type ValidateArr<
   Data extends unknown[],
   Acc,
   Context extends string,

@@ -15,7 +15,7 @@ type ResolveGenericProps =
 
 export const resolveGenerics = ({ withError, withContext, generics }: ResolveGenericProps): GENERIC[] =>
   match([withError || false, withContext || false])
-    .with([true, true], () => [ERROR_GENERIC, CONTEXT_GENERIC, ...generics])
+    .with([true, true], () => [CONTEXT_GENERIC, ERROR_GENERIC, ...generics])
     .with([true, false], () => [ERROR_GENERIC, ...generics])
     .with([false, true], () => [CONTEXT_GENERIC, ...generics])
     .with([false, false], () => generics)

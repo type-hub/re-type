@@ -5,12 +5,15 @@ import { templater } from "utils/templater"
 import { typeBuilder } from "utils/templater/typeBuilder"
 import { AbstractTypeBuilder } from "../Abstract"
 import { WITH_COMMENTS } from "../types"
+import { resolveLaxName } from "./utils"
+
+export * from "./utils"
 
 export class Lax extends AbstractTypeBuilder {
   protected withContext: boolean
 
   protected get laxName() {
-    return `${this.parsedType.name}_Lax`
+    return resolveLaxName(this.parsedType.name)
   }
 
   protected parsedType: PARSED_TYPE_DECLARATION

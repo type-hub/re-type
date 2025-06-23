@@ -10,7 +10,8 @@
     "graph:build": "depcruise src --include-only src --output-type dot | dot -T svg | depcruise-wrap-stream-in-html > index.html",
     "graph:test": "depcruise src --include-only src",
     "graph:watch": "nodemon --watch src --ext ts --exec \"npm run graph:build\"",
-    "graph:serve": "concurrently \"npm run graph:watch\" \"vite\""
+    "graph:serve": "concurrently \"npm run graph:watch\" \"vite\"",
+    "transform": "nodemon --watch src --ext ts --exec \"tsx ./src/test.ts\""
   },
   "keywords": [],
   "author": "",
@@ -34,6 +35,7 @@
     "nanoid": "^5.1.5",
     "ramda": "^0.30.1",
     "ts-pattern": "^5.7.1",
+    "tsx": "^4.20.3",
     "typescript-eslint": "^8.31.0"
   }
 }

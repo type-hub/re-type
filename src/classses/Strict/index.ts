@@ -1,3 +1,4 @@
+import { resolveLaxName } from "classses/Lax"
 import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "utils/parseTypeDeclarations"
 import { WITH_CONTEXT } from "utils/resolveGenerics"
 import { templater } from "utils/templater"
@@ -54,6 +55,6 @@ export class Strict {
     // todo: resolve either name
     // const typeDef = `Either_${this.parsedType.name}<
 
-    return templater.either.typeInvocation({ name: this.parsedType.name, generics })
+    return templater.either.typeInvocation({ name: resolveLaxName(this.parsedType.name), generics })
   }
 }

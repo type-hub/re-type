@@ -1,16 +1,13 @@
 import { resolveLaxName } from "classses/Lax"
+import { resolveStrictLaxName } from "classses/utils"
 import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "utils/parseTypeDeclarations"
 import { WITH_CONTEXT } from "utils/resolveGenerics"
 import { templater } from "utils/templater"
 import { WITH_COMMENTS } from "../types"
+import { resolveStrictName } from "./utils"
 
 export class Strict {
   protected withContext: boolean
-
-  protected get strictName() {
-    return `${this.parsedType.name}_Strict`
-  }
-
   protected parsedType: PARSED_TYPE_DECLARATION
 
   constructor(
@@ -22,9 +19,11 @@ export class Strict {
     this.parsedType = parseTypeDeclaration(typeDef)
   }
 
-  public typeDeclaration() {
-    return templater.strict.typeDeclaration({
-      name: this.strictName,
+  public laxTypeDeclaration() {
+    // TODO: lax or strict - which one is correct?
+    // return templater.strict.typeDeclaration({
+    return templater.lax.typeDeclaration({
+      name: resolveStrictLaxName(this.parsedType.name),
       generics: this.parsedType.generics,
       body: this.makeStrictBody({ withContext: false, withComments: false }),
       withContext: this.withContext,
@@ -37,12 +36,11 @@ export class Strict {
 
   public eitherTypeDeclaration() {
     const {
-      strictName: name,
-      parsedType: { generics },
+      parsedType: { generics, name },
     } = this
 
     return templater.either.typeDeclaration({
-      name,
+      name: resolveStrictName(name),
       generics,
     })
   }

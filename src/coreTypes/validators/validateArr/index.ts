@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DEAD_BRANCH } from "utilTypes"
 import { Trace } from "../../trace"
 import { _FlatValidate$ } from "../flatValidate"
 
@@ -62,7 +61,7 @@ export type ValidateFlatTuple$<
         Context,
         [...Index, any]
       >
-   : DEAD_BRANCH
+   : never // NO ERRORS
 
 // TESTS -----------------------------------------------
 

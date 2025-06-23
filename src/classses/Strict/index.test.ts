@@ -20,7 +20,7 @@ describe("TypeParser", () => {
       true,
     )
 
-    console.log(lax.typeDeclaration(), "\n")
+    console.log(lax.laxTypeDeclaration(), "\n")
     // console.log(lax.eitherTypeDeclaration(), "\n")
     // console.log(lax.inline())
 

@@ -14,5 +14,4 @@ export abstract class AbstractTypeBuilder {
   // protected abstract name(): string
 
   protected abstract makeLaxBody({ withContext, withComments }: WITH_CONTEXT & WITH_COMMENTS): string
-  protected abstract get laxName(): string
 }

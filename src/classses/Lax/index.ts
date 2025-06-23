@@ -12,10 +12,6 @@ export * from "./utils"
 export class Lax extends AbstractTypeBuilder {
   protected withContext: boolean
 
-  protected get laxName() {
-    return resolveLaxName(this.parsedType.name)
-  }
-
   protected parsedType: PARSED_TYPE_DECLARATION
 
   constructor(
@@ -31,7 +27,7 @@ export class Lax extends AbstractTypeBuilder {
 
   public typeDeclaration() {
     return templater.lax.typeDeclaration({
-      name: this.laxName,
+      name: resolveLaxName(this.parsedType.name),
       generics: this.parsedType.generics,
       body: this.makeLaxBody({ withContext: false, withComments: false }),
       withContext: this.withContext,
@@ -44,12 +40,11 @@ export class Lax extends AbstractTypeBuilder {
 
   public eitherTypeDeclaration() {
     const {
-      laxName: name,
-      parsedType: { generics },
+      parsedType: { generics, name },
     } = this
 
     return templater.either.typeDeclaration({
-      name,
+      name: resolveLaxName(name),
       generics,
     })
   }
@@ -61,6 +56,7 @@ export class Lax extends AbstractTypeBuilder {
     // TODO: inside validation missing (before return)
 
     const { generics, name } = this.parsedType
+    const laxName = resolveLaxName(name)
 
     // TODO: move to utils to templater?
     const conditionalTypeBody = generics
@@ -69,16 +65,17 @@ export class Lax extends AbstractTypeBuilder {
       .reverse()
       .reduce(
         //
-        typeBuilder.relaxConstraints(this.laxName),
+        typeBuilder.relaxConstraints(laxName),
         typeBuilder.typeInvocation({
           name,
+          parentName: laxName,
           generics: resolveGenerics({ withContext, generics }),
         }),
       )
 
     if (withComments) {
       return templater.renderInline({
-        name: this.laxName,
+        name: laxName,
         body: conditionalTypeBody,
       })
     }

@@ -1,79 +1,58 @@
 import { Lax } from "classses/Lax"
 import { Strict } from "classses/Strict"
-import { MismatchError } from "coreTypes/errors"
-import { ValidateFlatTuple$ } from "coreTypes/validators/validateArr"
+import fs from "node:fs"
+import { toPairs } from "ramda"
 import { ImportRegistry } from "services/ImportRegistry"
 
-type Preserve = MismatchError<"", "", "">
-type Check<A extends string, B extends number, C = 1> = "hura!"
-
-const lax = new Lax(
+const input = "type Check<A extends string, B extends number, C = 1> = A | B | C"
+const tests = {
   //
-  "type Check<A extends string, B extends number, C = 1> = A | B | C",
-  true,
-)
-
-const strict = new Strict(
+  never: `Check_Strict_Lax<"Check_Strict", never, 1, 10>`,
+  any: `Check_Strict_Lax<"Check_Strict", any, 1, 10>`,
+  unknown: `Check_Strict_Lax<"Check_Strict", unknown, 1, 10>`,
   //
-  "type Check<A extends string, B extends number, C = 1> = A | B | C",
-  true,
-)
+  number: `Check_Strict_Lax<"Check_Strict", number, 1, 10>`,
+  string_number: `Check_Strict_Lax<"Check_Strict", string | number, 1, 10>`,
+}
 
-console.log(lax.typeDeclaration(), "\n")
-console.log(lax.eitherTypeDeclaration(), "\n")
+const lax = new Lax(input, true)
+const strict = new Strict(input, true)
+
+// TODO: how to convert it into process/ pipe?
+const laxTypeDeclaration = lax.typeDeclaration()
+const laxEitherTypeDeclaration = lax.eitherTypeDeclaration()
+const strictTypeDeclaration = strict.laxTypeDeclaration()
+
 // console.log(lax.inline())
-console.log(strict.typeDeclaration(), "\n")
 // console.log(strict.eitherTypeDeclaration(), "\n")
 // console.log(strict.inline())
 
-console.log("imports", ImportRegistry.getImports())
+const content = `import {${ImportRegistry.getImports().join(", ")}} from "../src/coreTypes"
 
-// -------------------------------------------------------------------------
+${input}
 
-/**
-# Check_Lax
-@template _Context - string
-@template A - string
-@template B - number
-@template C - any, fallbacks to 1
-*/
-type Check_Lax<_Context extends string, A, B, C = 1> = A extends string
-  ? B extends number
-    ? Check<A, B, C>
-    : MismatchError<`${_Context}->Check_Lax->B::joilaxm`, B, number>
-  : MismatchError<`${_Context}->Check_Lax->A::o0o5y5a`, A, string>
+${laxTypeDeclaration}
 
-/**
-# Either_Check_Lax
-@template _Context - string
-@template _Error - GENERIC_ERROR
-@template A - string
-@template B - number
-@template C - any, fallbacks to 1
-*/
-type Either_Check_Lax<_Context extends string, _Error, A, B, C = 1> = [_Error] extends [never]
-  ? Check_Lax<_Context, A, B, C>
-  : _Error
+${laxEitherTypeDeclaration}
 
-/**
-# Check_Strict
-@template _Context - string
-@template A - string
-@template B - number
-@template C - any, fallbacks to 1
-*/
-type Check_Strict<_Context extends string, A, B, C = 1> = Either_Check_Lax<
-  _Context,
-  ValidateFlatTuple$<[_Context, A, B, C], `${_Context}->ValidateFlatTuple$`>,
-  A,
-  B,
-  C
->
+${strictTypeDeclaration}
 
-// -------------------------------------------------------------------------
+// TESTS -----------------------------
+${toPairs(tests)
+  .map(
+    ([testName, testType]) => `
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type Test_${testName} = ${testType}
+//   ^?`,
+  )
+  .join("\n")}`
 
-type AAA = Check_Strict<"Check_Strict", never, 1, 10>
-//   ^?
+fs.writeFile("./dist/generated.ts", content, (err) => {
+  if (err) {
+    console.error(err)
+  } else {
+    // file written successfully
+  }
+})
 
-type BBB = Check_Strict<"Check_Strict", "never", "1", 10>
-//   ^?
+ImportRegistry.clearImports()

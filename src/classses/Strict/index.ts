@@ -59,12 +59,4 @@ export class Strict {
 
     return typeDef
   }
-
-  // -------------------------------------------------------
-
-  public inlineInvocation() {
-    return this.makeStrictLaxBody({
-      parentName: resolveStrictLaxName(this.parsedType.name),
-    })
-  }
 }

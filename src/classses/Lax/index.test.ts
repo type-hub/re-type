@@ -7,7 +7,6 @@ describe("TypeParser", () => {
 
     console.log(lax.typeDeclaration({ withContext: true }), "\n")
     console.log(lax.eitherTypeDeclaration({ withContext: true }), "\n")
-    // console.log(lax.inline())
 
     const match =
       //

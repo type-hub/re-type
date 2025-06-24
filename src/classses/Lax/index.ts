@@ -63,11 +63,6 @@ export class Lax {
     })
   }
 
-  // TODO: dead code?
-  public inlineInvocation({ withContext }: WITH_CONTEXT) {
-    return this.makeLaxBody({ withContext, withComments: true })
-  }
-
   // --- PROTECTED ----------------------------------------------------------------------
 
   protected makeLaxBody({ withContext, withComments }: WITH_CONTEXT & WITH_COMMENTS) {

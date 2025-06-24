@@ -1,52 +1,71 @@
+import { resolveEitherName, resolveLaxName } from "classses/utils"
 import { prop } from "ramda"
+import { createJsDocs } from "utils/createJsDocs"
 import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "utils/parseTypeDeclarations"
 import { resolveGenerics, WITH_CONTEXT } from "utils/resolveGenerics"
-import { templater } from "utils/templater"
-import { typeBuilder } from "utils/templater/typeBuilder"
-import { AbstractTypeBuilder } from "../Abstract"
+import { typeBuilder } from "utils/typeBuilder"
 import { WITH_COMMENTS } from "../types"
-import { resolveLaxName } from "./utils"
 
-export * from "./utils"
-
-export class Lax extends AbstractTypeBuilder {
-  protected withContext: boolean
-
+export class Lax {
   protected parsedType: PARSED_TYPE_DECLARATION
 
-  constructor(
-    //
-    typeDef: string,
-    withContext?: boolean,
-  ) {
-    super()
-
-    this.withContext = !!withContext
+  constructor(typeDef: string) {
     this.parsedType = parseTypeDeclaration(typeDef)
   }
 
-  public typeDeclaration() {
-    return templater.lax.typeDeclaration({
-      name: resolveLaxName(this.parsedType.name),
+  public typeDeclaration({ withContext }: WITH_CONTEXT) {
+    const generics = resolveGenerics({ withContext, generics: this.parsedType.generics })
+    const name = resolveLaxName(this.parsedType.name)
+    const docs = createJsDocs({ name, generics })
+    const genericsDeclarations = typeBuilder.genericArgsDeclaration({ lax: true, generics })
+    const body = this.makeLaxBody({ withContext: false, withComments: false }) //fix optional params
+
+    return typeBuilder.typeDeclaration({
+      docs,
+      name,
+      genericsDeclarations,
+      body,
+    })
+  }
+
+  public eitherTypeDeclaration({ withContext }: WITH_CONTEXT) {
+    // const x = templater.either.typeDeclaration({
+    //   name: resolveLaxName(name),
+    //   generics,
+    // })
+
+    const targetTypeName = resolveLaxName(this.parsedType.name)
+    const typeName = resolveEitherName(targetTypeName)
+    const genericsWithError = resolveGenerics({
+      withContext: true,
+      withError: true,
       generics: this.parsedType.generics,
-      body: this.makeLaxBody({ withContext: false, withComments: false }),
-      withContext: this.withContext,
+    })
+    const genericsWithoutError = resolveGenerics({ withContext: true, generics: this.parsedType.generics })
+    const docs = createJsDocs({ name: typeName, generics: genericsWithError })
+    const genericsDeclarations = typeBuilder.genericArgsDeclaration({ generics: genericsWithError, lax: true }) // remove lax, error and context should have validation
+
+    const typeInvocation = typeBuilder.typeInvocation({
+      name: targetTypeName,
+      generics: genericsWithoutError,
+      parentName: typeName,
+    })
+
+    const body = `[_Error] extends [never]
+  ? ${typeInvocation}
+  : _Error`
+
+    return typeBuilder.typeDeclaration({
+      docs,
+      name: typeName,
+      genericsDeclarations,
+      body,
     })
   }
 
-  public inlineInvocation() {
-    return this.makeLaxBody({ withContext: false, withComments: true })
-  }
-
-  public eitherTypeDeclaration() {
-    const {
-      parsedType: { generics, name },
-    } = this
-
-    return templater.either.typeDeclaration({
-      name: resolveLaxName(name),
-      generics,
-    })
+  // TODO: dead code?
+  public inlineInvocation({ withContext }: WITH_CONTEXT) {
+    return this.makeLaxBody({ withContext, withComments: true })
   }
 
   // --- PROTECTED ----------------------------------------------------------------------
@@ -68,16 +87,19 @@ export class Lax extends AbstractTypeBuilder {
         typeBuilder.relaxConstraints(laxName),
         typeBuilder.typeInvocation({
           name,
-          parentName: laxName,
           generics: resolveGenerics({ withContext, generics }),
+          // parentName: "laxName",
         }),
       )
 
     if (withComments) {
-      return templater.renderInline({
-        name: laxName,
-        body: conditionalTypeBody,
-      })
+      return (
+        // prettier-ignore
+        `
+    // --- ${laxName} START ---
+      ${conditionalTypeBody}
+    // --- ${laxName} END ---`
+      )
     }
 
     return conditionalTypeBody

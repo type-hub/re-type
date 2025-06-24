@@ -17,17 +17,13 @@ const tests = {
   string_number: `${outputType}<"string_number", string | number, 1, 10>`,
 }
 
-const lax = new Lax(input, true)
-const strict = new Strict(input, true)
+const lax = new Lax(input)
+const strict = new Strict(input)
 
 // TODO: how to convert it into process/ pipe?
-const laxTypeDeclaration = lax.typeDeclaration()
-const laxEitherTypeDeclaration = lax.eitherTypeDeclaration()
-const strictTypeDeclaration = strict.laxTypeDeclaration()
-
-// console.log(lax.inline())
-// console.log(strict.eitherTypeDeclaration(), "\n")
-// console.log(strict.inline())
+const laxTypeDeclaration = lax.typeDeclaration({ withContext: true })
+const laxEitherTypeDeclaration = lax.eitherTypeDeclaration({ withContext: true })
+const strictTypeDeclaration = strict.strictLaxTypeDeclaration({ withContext: true })
 
 const content = `import {${ImportRegistry.getImports().join(", ")}} from "../src/coreTypes"
 

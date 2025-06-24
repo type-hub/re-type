@@ -1,7 +1,7 @@
 import { SafeOmit } from "utilTypes"
 import { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
 import { ParentName } from "utils/reTypeError/trace"
-import { genericArgsInvocation } from "./generics"
+import { genericArgsInvocation } from "./genericArgs"
 
 export const typeDeclaration = ({
   docs,

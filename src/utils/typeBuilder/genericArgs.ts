@@ -1,13 +1,11 @@
 import { match, P } from "ts-pattern"
 import { CONTEXT, CONTEXT_DECLARATION } from "utils/consts"
 import { GENERIC } from "utils/parseTypeDeclarations"
+import { ParentName } from "utils/reTypeError/trace"
+import { supportContextTracing } from "./utils"
 
-export const genericArgsInvocation = (generics: GENERIC[]) => generics.map(({ name }) => name).join(", ")
-
-export const genericArgsDeclaration = ({ generics, lax }: { generics: GENERIC[]; lax?: boolean }) => {
-  // console.log(lax, generics)
-
-  return generics
+export const genericArgsDeclaration = ({ generics, lax }: { generics: GENERIC[]; lax?: boolean }): string =>
+  generics
     .map((generic) => {
       return (
         // TODO: dirty, support context appropriately
@@ -28,4 +26,9 @@ export const genericArgsDeclaration = ({ generics, lax }: { generics: GENERIC[];
       )
     })
     .join(", ")
-}
+
+export const genericArgsInvocation = (generics: GENERIC[], parentName?: ParentName["parentName"]): string =>
+  generics
+    //
+    .map(supportContextTracing(parentName))
+    .join(", ")

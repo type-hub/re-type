@@ -1,9 +1,12 @@
 import { rejectContext, resolveEitherLaxName, resolveStrictLaxName } from "classses/utils"
 import { ImportRegistry } from "services/ImportRegistry"
 import { createJsDocs } from "utils/createJsDocs"
-import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "utils/parseTypeDeclarations"
-import { resolveGenerics, WITH_CONTEXT } from "utils/resolveGenerics"
-import { ParentName, trace } from "utils/reTypeError/trace"
+import type { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
+import { parseTypeDeclaration } from "utils/parseTypeDeclarations"
+import type { WITH_CONTEXT } from "utils/resolveGenerics"
+import { resolveGenerics } from "utils/resolveGenerics"
+import type { ParentName } from "utils/reTypeError/trace"
+import { trace } from "utils/reTypeError/trace"
 import { typeBuilder } from "utils/typeBuilder"
 
 export class Strict {
@@ -13,7 +16,7 @@ export class Strict {
     this.parsedType = parseTypeDeclaration(typeDef)
   }
 
-  public strictLaxTypeDeclaration({ withContext }: WITH_CONTEXT) {
+  public strictLaxTypeDeclaration({ withContext }: WITH_CONTEXT): string {
     const generics = resolveGenerics({ withContext, generics: this.parsedType.generics })
     const name = resolveStrictLaxName(this.parsedType.name)
     const docs = createJsDocs({ name, generics })
@@ -31,7 +34,7 @@ export class Strict {
   }
 
   // TODO: import validation modules keys
-  protected makeStrictLaxBody({ parentName }: ParentName) {
+  protected makeStrictLaxBody({ parentName }: ParentName): string {
     // TODO: mismatch error could be more detailed and reuse validation (what it should be)
     // TODO: Kamils class
     const ValidationType = "ValidateFlatTuple$"

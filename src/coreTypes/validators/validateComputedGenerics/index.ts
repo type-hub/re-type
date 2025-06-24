@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {
+import type {
   DEAD_BRANCH,
   UnionToArray,
 } from "../../../utilTypes"
-import { Trace } from "../../trace"
-import { _FlatValidate$ } from "../flatValidate"
+import type { Trace } from "../../trace"
+import type { _FlatValidate$ } from "../flatValidate"
 
 type Either_ValidateObjWithStop<
   _Error,

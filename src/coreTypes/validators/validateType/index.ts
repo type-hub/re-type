@@ -5,8 +5,8 @@ import type {
   BypassModes,
 } from ".."
 import type { ReTypeError } from "../../errors"
-import { FilterError$ } from "../../errors/utils"
-import { Trace } from "../../trace"
+import type { FilterError$ } from "../../errors/utils"
+import type { Trace } from "../../trace"
 
 type _ValidateType<
   CX extends string,

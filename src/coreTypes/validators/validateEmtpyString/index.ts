@@ -3,7 +3,7 @@ import type {
   BypassModes,
 } from ".."
 import type { EmptyStringError } from "../../errors"
-import { FilterError$ } from "../../errors/utils"
+import type { FilterError$ } from "../../errors/utils"
 
 type _ValidateEmptyString<
   Bypass extends BYPASS_MODES,

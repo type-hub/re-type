@@ -1,4 +1,4 @@
-import {
+import type {
   ErrorsLookup,
   NeverError,
 } from "./errors"

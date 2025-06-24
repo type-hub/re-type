@@ -5,8 +5,8 @@ describe("TypeParser", () => {
   it("should create relaxed variant", () => {
     const lax = new Lax("type Pick<A extends string, B extends number, C = 1> = A | B | C")
 
-    console.log(lax.typeDeclaration({ withContext: true }), "\n")
-    console.log(lax.eitherTypeDeclaration({ withContext: true }), "\n")
+    // console.log(lax.typeDeclaration({ withContext: true }), "\n")
+    // console.log(lax.eitherTypeDeclaration({ withContext: true }), "\n")
 
     const match =
       //

@@ -1,8 +1,8 @@
 // TODO: why imports from classes
 import { match } from "ts-pattern"
-import { SafePick } from "utilTypes"
+import type { SafePick } from "utilTypes"
 import { CONTEXT_GENERIC, ERROR_GENERIC } from "../consts"
-import { GENERIC, PARSED_TYPE_DECLARATION } from "../parseTypeDeclarations"
+import type { GENERIC, PARSED_TYPE_DECLARATION } from "../parseTypeDeclarations"
 
 export type WITH_CONTEXT = { withContext: boolean }
 export type WITH_ERROR = { withError: boolean }

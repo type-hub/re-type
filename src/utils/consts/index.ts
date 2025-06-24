@@ -1,4 +1,4 @@
-import { GENERIC } from "../parseTypeDeclarations"
+import type { GENERIC } from "../parseTypeDeclarations"
 
 // TODO: possibly ./class/consts
 export const CONTEXT = "_Context" as const

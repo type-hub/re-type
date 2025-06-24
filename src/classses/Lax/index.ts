@@ -1,10 +1,12 @@
 import { resolveEitherName, resolveLaxName } from "classses/utils"
 import { prop } from "ramda"
 import { createJsDocs } from "utils/createJsDocs"
-import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "utils/parseTypeDeclarations"
-import { resolveGenerics, WITH_CONTEXT } from "utils/resolveGenerics"
+import type { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
+import { parseTypeDeclaration } from "utils/parseTypeDeclarations"
+import type { WITH_CONTEXT } from "utils/resolveGenerics"
+import { resolveGenerics } from "utils/resolveGenerics"
 import { typeBuilder } from "utils/typeBuilder"
-import { WITH_COMMENTS } from "../types"
+import type { WITH_COMMENTS } from "../types"
 
 export class Lax {
   protected parsedType: PARSED_TYPE_DECLARATION
@@ -13,7 +15,7 @@ export class Lax {
     this.parsedType = parseTypeDeclaration(typeDef)
   }
 
-  public typeDeclaration({ withContext }: WITH_CONTEXT) {
+  public typeDeclaration({ withContext }: WITH_CONTEXT): string {
     const generics = resolveGenerics({ withContext, generics: this.parsedType.generics })
     const name = resolveLaxName(this.parsedType.name)
     const docs = createJsDocs({ name, generics })
@@ -28,20 +30,15 @@ export class Lax {
     })
   }
 
-  public eitherTypeDeclaration({ withContext }: WITH_CONTEXT) {
-    // const x = templater.either.typeDeclaration({
-    //   name: resolveLaxName(name),
-    //   generics,
-    // })
-
+  public eitherTypeDeclaration({ withContext }: WITH_CONTEXT): string {
     const targetTypeName = resolveLaxName(this.parsedType.name)
     const typeName = resolveEitherName(targetTypeName)
     const genericsWithError = resolveGenerics({
-      withContext: true,
+      withContext,
       withError: true,
       generics: this.parsedType.generics,
     })
-    const genericsWithoutError = resolveGenerics({ withContext: true, generics: this.parsedType.generics })
+    const genericsWithoutError = resolveGenerics({ withContext, generics: this.parsedType.generics })
     const docs = createJsDocs({ name: typeName, generics: genericsWithError })
     const genericsDeclarations = typeBuilder.genericArgsDeclaration({ generics: genericsWithError, lax: true }) // remove lax, error and context should have validation
 
@@ -65,7 +62,7 @@ export class Lax {
 
   // --- PROTECTED ----------------------------------------------------------------------
 
-  protected makeLaxBody({ withContext, withComments }: WITH_CONTEXT & WITH_COMMENTS) {
+  protected makeLaxBody({ withContext, withComments }: WITH_COMMENTS & WITH_CONTEXT): string {
     // TODO: mismatch error could be more detailed and reuse validation (what it should be)
     // TODO: inside validation missing (before return)
 

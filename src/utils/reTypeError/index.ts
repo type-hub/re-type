@@ -1,7 +1,9 @@
-import { GENERIC } from "utils/parseTypeDeclarations"
-import { ERROR_TYPE, ERRORS_LOOKUP, ErrorsLookup, ErrorType, ReTypeError } from "../../coreTypes/errors"
-import { SafeOmit } from "../../utilTypes"
-import { traceArg, TraceProps } from "./trace"
+import type { GENERIC } from "utils/parseTypeDeclarations"
+import type { ErrorType, ErrorsLookup, ReTypeError } from "../../coreTypes/errors";
+import { ERRORS_LOOKUP, ERROR_TYPE } from "../../coreTypes/errors"
+import type { SafeOmit } from "../../utilTypes"
+import type { TraceProps } from "./trace";
+import { traceArg } from "./trace"
 
 type MismatchErrorProps = SafeOmit<TraceProps, "currentArg"> & {
   generic: GENERIC

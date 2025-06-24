@@ -48,8 +48,6 @@ type Test_${testName} = ${testType}
 fs.writeFile("./dist/generated.ts", content, (err) => {
   if (err) {
     console.error(err)
-  } else {
-    // file written successfully
   }
 })
 

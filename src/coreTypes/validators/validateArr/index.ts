@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Trace } from "../../trace"
-import { _FlatValidate$ } from "../flatValidate"
+import type { Trace } from "../../trace"
+import type { _FlatValidate$ } from "../flatValidate"
 
 //  -p-rettier-ignore
 /**

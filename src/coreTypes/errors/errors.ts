@@ -1,8 +1,8 @@
 // TODO: add branding
 // declare const __brand: unique symbol
 
-import { ValueOf } from "../../utilTypes"
-import { Trace } from "../trace"
+import type { ValueOf } from "../../utilTypes"
+import type { Trace } from "../trace"
 
 export const ERROR_TYPE = {
   // input --------------------------------

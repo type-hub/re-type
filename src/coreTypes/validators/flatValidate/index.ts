@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
+import type {
   AnyError,
   AnyMatchError$,
   FilterError$,
   NeverError,
   UnknownError,
 } from "../../errors"
-import { Trace } from "../../trace"
-import {
+import type { Trace } from "../../trace"
+import type {
   BYPASS_MODES,
   BypassModes,
 } from "../consts"
@@ -26,7 +26,7 @@ export type _FlatValidate$<
   [T] extends [never]
     ? NeverError<Trace<CX, Name>, T>
     : // any
-    0 extends 1 & T
+    0 extends T & 1
     ? AnyError<Trace<CX, Name>, T>
     : // unknown
     [unknown] extends [T]
@@ -66,5 +66,5 @@ type E = _FlatValidate$<[], "Test">
 //   ^?
 
 // prettier-ignore
-type Z = _FlatValidate$<string | number | boolean, "Test">
+type Z = _FlatValidate$<boolean | number | string, "Test">
 //   ^?

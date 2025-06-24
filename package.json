@@ -12,7 +12,9 @@
     "test": "concurrently \"npm run test:vitest\" \"npm run test:tsc\" \"npm run graph:test\"",
     "test:vitest": "vitest run",
     "test:tsc": "tsc --noEmit",
-    "test:watch:vitest": "vitest"
+    "test:watch:vitest": "vitest",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "keywords": [],
   "author": "",

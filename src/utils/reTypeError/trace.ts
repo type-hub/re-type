@@ -1,21 +1,19 @@
 import { CONTEXT } from "utils/consts"
-import { SafeOmit } from "utilTypes"
 import { uuid } from "./uuid"
 
-export type TraceProps = {
-  withID?: boolean
-  currentFunc: string
-  currentArg: string
-}
+export type ParentName = { parentName: string }
 
-export const traceArg = ({ withID, currentFunc, currentArg }: TraceProps) => {
-  const stringLiteral = `${"${" + CONTEXT + "}"}`
+// prettier-ignore
+export type TraceProps =
+  & ParentName
+  & {
+    currentArg: string
+    withID?: boolean
+  }
 
-  return `\`${stringLiteral}->${currentFunc}->${currentArg}${withID ? `::${uuid()}` : ""}\``
-}
+const contextLiteral = `${"${" + CONTEXT + "}"}`
 
-export const trace = ({ withID, currentFunc }: SafeOmit<TraceProps, "currentArg">) => {
-  const stringLiteral = `${"${" + CONTEXT + "}"}`
+export const traceArg = ({ withID, parentName, currentArg }: TraceProps) =>
+  `\`${contextLiteral}->${parentName}->${currentArg}${withID ? `::${uuid()}` : ""}\``
 
-  return `\`${stringLiteral}->${currentFunc}${withID ? `::${uuid()}` : ""}\``
-}
+export const trace = ({ parentName }: ParentName) => `\`${contextLiteral}->${parentName}\``

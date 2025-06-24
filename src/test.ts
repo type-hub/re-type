@@ -5,14 +5,16 @@ import { toPairs } from "ramda"
 import { ImportRegistry } from "services/ImportRegistry"
 
 const input = "type Check<A extends string, B extends number, C = 1> = A | B | C"
+const outputType = "Check_Strict_Lax"
 const tests = {
   //
-  never: `Check_Strict_Lax<"Check_Strict", never, 1, 10>`,
-  any: `Check_Strict_Lax<"Check_Strict", any, 1, 10>`,
-  unknown: `Check_Strict_Lax<"Check_Strict", unknown, 1, 10>`,
+  never: `${outputType}<"never", never, 1, 10>`,
+  any: `${outputType}<"any", any, 1, 10>`,
+  unknown: `${outputType}<"unknown", unknown, 1, 10>`,
   //
-  number: `Check_Strict_Lax<"Check_Strict", number, 1, 10>`,
-  string_number: `Check_Strict_Lax<"Check_Strict", string | number, 1, 10>`,
+  number: `${outputType}<"number", number, 1, 10>`,
+  // TODO: remove non error values from union output type
+  string_number: `${outputType}<"string_number", string | number, 1, 10>`,
 }
 
 const lax = new Lax(input, true)

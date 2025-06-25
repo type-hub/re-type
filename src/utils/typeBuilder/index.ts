@@ -1,4 +1,4 @@
-import { genericArgsDeclaration, genericArgsInvocation } from "./generics"
+import { genericArgsDeclaration, genericArgsInvocation } from "./genericArgs"
 import { relaxConstraints } from "./relaxConstraints"
 import { typeDeclaration, typeInvocation } from "./typeDefinitions"
 

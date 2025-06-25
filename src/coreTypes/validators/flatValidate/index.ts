@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
+import type {
   AnyError,
   AnyMatchError$,
   FilterError$,
   NeverError,
   UnknownError,
 } from "../../errors"
-import { Trace } from "../../trace"
-import {
+import type { Trace } from "../../trace"
+import type {
   BYPASS_MODES,
   BypassModes,
 } from "../consts"
 
-type Name = "CoreValidate$"
+type Name = "FlatValidate$"
 
 // prettier-ignore
 export type _FlatValidate$<
@@ -26,13 +26,13 @@ export type _FlatValidate$<
   [T] extends [never]
     ? NeverError<Trace<CX, Name>, T>
     : // any
-    0 extends 1 & T
+    0 extends T & 1
     ? AnyError<Trace<CX, Name>, T>
     : // unknown
     [unknown] extends [T]
     ? UnknownError<Trace<CX, Name>, T>
-    : // errors
-    AnyMatchError$<T> extends never
+    : // errors, why brackets?
+    [AnyMatchError$<T>] extends [never]
     ? BypassMode extends BypassModes["off"]
       ? never // good
         // possible arr, obj check for errors required
@@ -66,5 +66,5 @@ type E = _FlatValidate$<[], "Test">
 //   ^?
 
 // prettier-ignore
-type Z = _FlatValidate$<string | number | boolean, "Test">
+type Z = _FlatValidate$<boolean | number | string, "Test">
 //   ^?

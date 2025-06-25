@@ -6,7 +6,7 @@ import type {
   MismatchError,
   NonLiteralError,
 } from "../../errors"
-import { FilterError$ } from "../../errors/utils"
+import type { FilterError$ } from "../../errors/utils"
 
 export type ValidateLiteral$<
   Mode extends BYPASS_MODES,

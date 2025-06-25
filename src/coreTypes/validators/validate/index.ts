@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Trace } from "../../trace"
-import { BypassModes } from "../consts"
-import { _FlatValidate$ } from "../flatValidate"
-import { ValidateComputedGenerics } from "../validateComputedGenerics"
+import type { Trace } from "../../trace"
+import type { BypassModes } from "../consts"
+import type { _FlatValidate$ } from "../flatValidate"
+import type { ValidateComputedGenerics } from "../validateComputedGenerics"
 
 type ValidateArr_ORG<
   Data extends unknown[],
@@ -13,11 +13,10 @@ type ValidateArr_ORG<
 > = [Data] extends [[infer First, ...infer Rest]]
   ? ValidateArr<
       Rest,
-      | Acc
-      | _FlatValidate$<
+      _FlatValidate$<
           First,
           Trace<CX, `[${Index["length"]}]`>
-        >,
+        > | Acc,
       CX,
       [...Index, any]
     >
@@ -59,7 +58,7 @@ type SwapObjFinal = SwapObj
 
 // -----------------------------------------------------
 
-type ValidateArr<
+export type ValidateArr<
   Data extends unknown[],
   Acc,
   Context extends string,
@@ -67,11 +66,10 @@ type ValidateArr<
 > = [Data] extends [[infer First, ...infer Rest]]
   ? ValidateArr<
       Rest,
-      | Acc
-      | _FlatValidate$<
+      _FlatValidate$<
           First,
           Trace<Context, `[${Index["length"]}]`>
-        >,
+        > | Acc,
       Context,
       [...Index, any]
     >

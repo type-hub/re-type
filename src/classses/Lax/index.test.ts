@@ -1,30 +1,12 @@
-import { ImportRegistry } from "services/ImportRegistry"
-import { beforeEach, describe, expect, it } from "vitest"
+import { describe, expect, it } from "vitest"
 import { Lax } from "."
-
-beforeEach(() => {
-  // called once before each test run
-  ImportRegistry.clearImports()
-
-  // clean up function, called once after each test run
-  return () => {
-    ImportRegistry.clearImports()
-  }
-})
 
 describe("TypeParser", () => {
   it("should create relaxed variant", () => {
-    const lax = new Lax(
-      //
-      "type Pick<A extends string, B extends number, C = 1> = A | B | C",
-      true,
-    )
+    const lax = new Lax("type Pick<A extends string, B extends number, C = 1> = A | B | C")
 
-    console.log(lax.typeDeclaration(), "\n")
-    console.log(lax.eitherTypeDeclaration(), "\n")
-    // console.log(lax.inline())
-
-    console.log("imports", ImportRegistry.getImports())
+    // console.log(lax.typeDeclaration({ withContext: true }), "\n")
+    // console.log(lax.eitherTypeDeclaration({ withContext: true }), "\n")
 
     const match =
       //

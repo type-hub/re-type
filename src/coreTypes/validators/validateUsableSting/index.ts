@@ -1,4 +1,4 @@
-import { FilterError$ } from "../../errors/utils"
+import type { FilterError$ } from "../../errors/utils"
 import type { EitherValidate } from "../validate"
 import type { EitherValidate_EmptyString$ } from "../validateEmtpyString"
 import type { EitherValidate_StringLiteral } from "../validateLiteral"

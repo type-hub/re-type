@@ -1,59 +1,65 @@
-import { PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "utils/parseTypeDeclarations"
-import { WITH_CONTEXT } from "utils/resolveGenerics"
-import { templater } from "utils/templater"
-import { WITH_COMMENTS } from "../types"
+import { rejectContext, resolveEitherLaxName, resolveStrictLaxName } from "classses/utils"
+import { ImportRegistry } from "services/ImportRegistry"
+import { createJsDocs } from "utils/createJsDocs"
+import type { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
+import { parseTypeDeclaration } from "utils/parseTypeDeclarations"
+import type { WITH_CONTEXT } from "utils/resolveGenerics"
+import { resolveGenerics } from "utils/resolveGenerics"
+import type { ParentName } from "utils/reTypeError/trace"
+import { trace } from "utils/reTypeError/trace"
+import { typeBuilder } from "utils/typeBuilder"
 
 export class Strict {
-  protected withContext: boolean
-
-  protected get strictName() {
-    return `${this.parsedType.name}_Strict`
-  }
-
   protected parsedType: PARSED_TYPE_DECLARATION
 
-  constructor(
-    //
-    typeDef: string,
-    withContext?: boolean,
-  ) {
-    this.withContext = !!withContext
+  constructor(typeDef: string) {
     this.parsedType = parseTypeDeclaration(typeDef)
   }
 
-  public typeDeclaration() {
-    return templater.strict.typeDeclaration({
-      name: this.strictName,
-      generics: this.parsedType.generics,
-      body: this.makeStrictBody({ withContext: false, withComments: false }),
-      withContext: this.withContext,
+  public strictLaxTypeDeclaration({ withContext }: WITH_CONTEXT): string {
+    const generics = resolveGenerics({ withContext, generics: this.parsedType.generics })
+    const name = resolveStrictLaxName(this.parsedType.name)
+    const docs = createJsDocs({ name, generics })
+    const genericsDeclarations = typeBuilder.genericArgsDeclaration({ lax: true, generics })
+    const body = this.makeStrictLaxBody({
+      parentName: name,
     })
-  }
 
-  public inlineInvocation() {
-    return this.makeStrictBody({ withContext: false, withComments: true })
-  }
-
-  public eitherTypeDeclaration() {
-    const {
-      strictName: name,
-      parsedType: { generics },
-    } = this
-
-    return templater.either.typeDeclaration({
+    return typeBuilder.typeDeclaration({
+      docs,
       name,
-      generics,
+      genericsDeclarations,
+      body,
     })
   }
 
-  protected makeStrictBody({ withContext, withComments }: WITH_CONTEXT & WITH_COMMENTS) {
+  // TODO: import validation modules keys
+  protected makeStrictLaxBody({ parentName }: ParentName): string {
     // TODO: mismatch error could be more detailed and reuse validation (what it should be)
-    // TODO: inside validation missing (before return)
-    const { generics } = this.parsedType
+    // TODO: Kamils class
+    const ValidationType = "ValidateFlatTuple$"
+    ImportRegistry.addImport(ValidationType)
 
-    // todo: resolve either name
-    // const typeDef = `Either_${this.parsedType.name}<
+    const generics = resolveGenerics({ withContext: true, generics: this.parsedType.generics })
+    const genericsInvocationWithContext = typeBuilder.genericArgsInvocation(generics)
+    const genericsInvocationWithoutContext = typeBuilder.genericArgsInvocation(rejectContext(generics))
 
-    return templater.either.typeInvocation({ name: this.parsedType.name, generics })
+    // TODO: fix utils func
+    const typeName = resolveEitherLaxName(this.parsedType.name)
+    const contextString = trace({ parentName })
+
+    const typeDef = `${typeName}<
+  // Trace
+  ${contextString},
+  // Validate
+  ${ValidationType}<
+    [${genericsInvocationWithContext}],
+    ${contextString}
+  >,
+  // Pass original generics
+  ${genericsInvocationWithoutContext}
+>`
+
+    return typeDef
   }
 }

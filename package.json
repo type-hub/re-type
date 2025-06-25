@@ -4,14 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest run",
-    "test:tsc": "tsc --noEmit",
-    "test:watch": "vitest",
-    "graph:build": "depcruise src --include-only src --output-type dot | dot -T svg | depcruise-wrap-stream-in-html > index.html",
-    "graph:test": "depcruise src --include-only src",
+    "transform": "nodemon --watch src --ext ts --exec \"tsx ./src/test.ts\"",
+    "graph:build": "depcruise src --output-type dot | dot -T svg | depcruise-wrap-stream-in-html > index.html",
+    "graph:test": "depcruise src",
     "graph:watch": "nodemon --watch src --ext ts --exec \"npm run graph:build\"",
     "graph:serve": "concurrently \"npm run graph:watch\" \"vite\"",
-    "generate-type-mirror": "npx tsx src/scripts/generateTypeMirrorClass"
+    "generate-type-mirror": "npx tsx src/scripts/generateTypeMirrorClass",
+    "test": "concurrently \"npm run test:vitest\" \"npm run test:tsc\" \"npm run graph:test\"",
+    "test:vitest": "vitest run",
+    "test:tsc": "tsc --noEmit",
+    "test:watch:vitest": "vitest",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "keywords": [],
   "author": "",
@@ -36,6 +40,7 @@
     "nanoid": "^5.1.5",
     "ramda": "^0.30.1",
     "ts-pattern": "^5.7.1",
+    "tsx": "^4.20.3",
     "typescript-eslint": "^8.31.0"
   }
 }

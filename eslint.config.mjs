@@ -36,6 +36,45 @@ export default [
           destructuredArrayIgnorePattern: "^_",
         },
       ],
+      "object-shorthand": ["error", "always"],
+      "arrow-body-style": ["error", "as-needed"],
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+
+      // TypeScript-specific rules
+      "@typescript-eslint/explicit-function-return-type": [
+        "error",
+        {
+          allowExpressions: true,
+          allowHigherOrderFunctions: true,
+        },
+      ],
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "separate-type-imports",
+          disallowTypeAnnotations: true,
+        },
+      ],
+      "@typescript-eslint/sort-type-constituents": "error",
+      "sort-imports": [
+        "error",
+        {
+          ignoreCase: false,
+          ignoreDeclarationSort: true, // Let ESLint sort import declarations
+          ignoreMemberSort: false,
+          memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
+          allowSeparatedGroups: true,
+        },
+      ],
+      "@typescript-eslint/no-floating-promises": "error",
+      "@typescript-eslint/no-misused-promises": "error",
+
+      // General code quality rules
+      "prefer-const": "error",
+      eqeqeq: ["error", "always", { null: "ignore" }],
+      "no-return-await": "off",
+      "@typescript-eslint/return-await": ["error", "in-try-catch"],
     },
   },
 ]

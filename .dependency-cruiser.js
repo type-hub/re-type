@@ -384,10 +384,6 @@ module.exports = {
               attributes: { fillcolor: "#FFA726", fontcolor: "black" },
             },
             {
-              criteria: { source: "utils" },
-              attributes: { fillcolor: "#26C6DA", fontcolor: "black" },
-            },
-            {
               criteria: { source: "classses" },
               attributes: { fillcolor: "#EF5350", fontcolor: "black" },
             },
@@ -395,12 +391,16 @@ module.exports = {
               criteria: { source: "coreTypes" },
               attributes: { fillcolor: "#AB47BC", fontcolor: "black" },
             },
+            {
+              criteria: { source: "utils/typeBuilder" },
+              attributes: { fillcolor: "#66BB6A", fontcolor: "black" },
+            },
+            {
+              criteria: { source: "utils" },
+              attributes: { fillcolor: "#26C6DA", fontcolor: "black" },
+            },
           ],
           dependencies: [
-            {
-              criteria: { resolved: "utils" },
-              attributes: { color: "#26C6DA" },
-            },
             {
               criteria: { resolved: "classses" },
               attributes: { color: "#EF5350" },
@@ -412,6 +412,14 @@ module.exports = {
             {
               criteria: { resolved: "services" },
               attributes: { color: "#FFA726" },
+            },
+            {
+              criteria: { resolved: "utils/typeBuilder" },
+              attributes: { color: "#66BB6A" },
+            },
+            {
+              criteria: { resolved: "utils" },
+              attributes: { color: "#26C6DA" },
             },
           ],
           edge: {

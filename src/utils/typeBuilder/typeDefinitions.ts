@@ -5,18 +5,18 @@ import { genericArgsInvocation } from "./genericArgs"
 
 export const typeDeclaration = ({
   docs,
-  name,
+  typeName,
   genericsDeclarations,
   body,
 }: {
   docs: string
-  name: string
+  typeName: string
   genericsDeclarations: string
   body: string
 }): string => `${docs}
-type ${name}<${genericsDeclarations}> = ${body}`
+type ${typeName}<${genericsDeclarations}> = ${body}`
 
 type Props = Partial<ParentName> & SafeOmit<PARSED_TYPE_DECLARATION, "body">
 
-export const typeInvocation = ({ name, generics, parentName }: Props): string =>
-  `${name}<${genericArgsInvocation(generics, parentName)}>`
+export const typeInvocation = ({ typeName, generics, parentName }: Props): string =>
+  `${typeName}<${genericArgsInvocation(generics, parentName)}>`

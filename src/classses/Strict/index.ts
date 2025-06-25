@@ -18,16 +18,16 @@ export class Strict {
 
   public strictLaxTypeDeclaration({ withContext }: WITH_CONTEXT): string {
     const generics = resolveGenerics({ withContext, generics: this.parsedType.generics })
-    const name = resolveStrictLaxName(this.parsedType.name)
-    const docs = createJsDocs({ name, generics })
+    const typeName = resolveStrictLaxName(this.parsedType.typeName)
+    const docs = createJsDocs({ typeName, generics })
     const genericsDeclarations = typeBuilder.genericArgsDeclaration({ lax: true, generics })
     const body = this.makeStrictLaxBody({
-      parentName: name,
+      parentName: typeName,
     })
 
     return typeBuilder.typeDeclaration({
       docs,
-      name,
+      typeName,
       genericsDeclarations,
       body,
     })
@@ -44,8 +44,7 @@ export class Strict {
     const genericsInvocationWithContext = typeBuilder.genericArgsInvocation(generics)
     const genericsInvocationWithoutContext = typeBuilder.genericArgsInvocation(rejectContext(generics))
 
-    // TODO: fix utils func
-    const typeName = resolveEitherLaxName(this.parsedType.name)
+    const typeName = resolveEitherLaxName(this.parsedType.typeName)
     const contextString = trace({ parentName })
 
     const typeDef = `${typeName}<

@@ -13,7 +13,7 @@ export type TraceProps =
 
 const contextLiteral = `${"${" + CONTEXT + "}"}`
 
-export const traceArg = ({ withID, parentName, currentArg }: TraceProps) =>
+export const traceArg = ({ withID, parentName, currentArg }: TraceProps): string =>
   `\`${contextLiteral}->${parentName}->${currentArg}${withID ? `::${uuid()}` : ""}\``
 
-export const trace = ({ parentName }: ParentName) => `\`${contextLiteral}->${parentName}\``
+export const trace = ({ parentName }: ParentName): string => `\`${contextLiteral}->${parentName}\``

@@ -40,7 +40,7 @@ type _EitherValidate$<
     >
   : _Error
 
-type ParentName = "ValidateFlatTuple$"
+type CurrentTypeName = "ValidateFlatTuple$"
 
 // prettier-ignore
 export type ValidateFlatTuple$<
@@ -58,7 +58,7 @@ export type ValidateFlatTuple$<
         _FlatValidate$<
           FirstArg,
           Trace<
-            Trace<Context, ParentName>,
+            Trace<Context, CurrentTypeName>,
             `[${Index["length"]}]`
           >
         >,

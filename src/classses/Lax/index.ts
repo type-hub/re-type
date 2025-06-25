@@ -45,7 +45,7 @@ export class Lax {
     const typeInvocation = typeBuilder.typeInvocation({
       typeName: targetTypeName,
       generics: genericsWithoutError,
-      parentName: typeName,
+      currentTypeName: typeName,
     })
 
     const body = `[_Error] extends [never]
@@ -80,7 +80,7 @@ export class Lax {
         typeBuilder.typeInvocation({
           typeName,
           generics: resolveGenerics({ withContext, generics }),
-          // parentName: "laxName",
+          // currentTypeName: "laxName",
         }),
       )
 

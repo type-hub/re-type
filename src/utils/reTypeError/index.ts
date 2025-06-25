@@ -1,8 +1,8 @@
 import type { GENERIC } from "utils/parseTypeDeclarations"
-import type { ErrorType, ErrorsLookup, ReTypeError } from "../../coreTypes/errors";
+import type { ErrorType, ErrorsLookup, ReTypeError } from "../../coreTypes/errors"
 import { ERRORS_LOOKUP, ERROR_TYPE } from "../../coreTypes/errors"
 import type { SafeOmit } from "../../utilTypes"
-import type { TraceProps } from "./trace";
+import type { TraceProps } from "./trace"
 import { traceArg } from "./trace"
 
 type MismatchErrorProps = SafeOmit<TraceProps, "currentArg"> & {
@@ -39,51 +39,51 @@ const buildReTypeError = <
 
 export const reTypeError = {
   // TODO: proxy?
-  MismatchError: ({ withID, parentName, generic }: MismatchErrorProps) => {
-    const _context = traceArg({ withID, parentName, currentArg: generic.name })
+  MismatchError: ({ withID, currentTypeName, generic }: MismatchErrorProps) => {
+    const _context = traceArg({ withID, currentTypeName, currentArg: generic.name })
 
     return buildReTypeError(ERROR_TYPE.MismatchError, _context, generic)
   },
 
   // TODO: adjust error props type
-  OpenTypeError: ({ withID, parentName, generic }: MismatchErrorProps) => {
-    const _context = traceArg({ withID, parentName, currentArg: generic.name })
+  OpenTypeError: ({ withID, currentTypeName, generic }: MismatchErrorProps) => {
+    const _context = traceArg({ withID, currentTypeName, currentArg: generic.name })
 
     return buildReTypeError(ERROR_TYPE.OpenTypeError, _context, generic)
   },
 
-  NeverError: ({ withID, parentName, generic }: MismatchErrorProps) => {
-    const _context = traceArg({ withID, parentName, currentArg: generic.name })
+  NeverError: ({ withID, currentTypeName, generic }: MismatchErrorProps) => {
+    const _context = traceArg({ withID, currentTypeName, currentArg: generic.name })
 
     return buildReTypeError(ERROR_TYPE.NeverError, _context, generic)
   },
 
-  AnyError: ({ withID, parentName, generic }: MismatchErrorProps) => {
-    const _context = traceArg({ withID, parentName, currentArg: generic.name })
+  AnyError: ({ withID, currentTypeName, generic }: MismatchErrorProps) => {
+    const _context = traceArg({ withID, currentTypeName, currentArg: generic.name })
 
     return buildReTypeError(ERROR_TYPE.AnyError, _context, generic)
   },
 
-  UnknownError: ({ withID, parentName, generic }: MismatchErrorProps) => {
-    const _context = traceArg({ withID, parentName, currentArg: generic.name })
+  UnknownError: ({ withID, currentTypeName, generic }: MismatchErrorProps) => {
+    const _context = traceArg({ withID, currentTypeName, currentArg: generic.name })
 
     return buildReTypeError(ERROR_TYPE.UnknownError, _context, generic)
   },
 
-  NonLiteralError: ({ withID, parentName, generic }: MismatchErrorProps) => {
-    const _context = traceArg({ withID, parentName, currentArg: generic.name })
+  NonLiteralError: ({ withID, currentTypeName, generic }: MismatchErrorProps) => {
+    const _context = traceArg({ withID, currentTypeName, currentArg: generic.name })
 
     return buildReTypeError(ERROR_TYPE.NonLiteralError, _context, generic)
   },
 
-  EmptyStringError: ({ withID, parentName, generic }: MismatchErrorProps) => {
-    const _context = traceArg({ withID, parentName, currentArg: generic.name })
+  EmptyStringError: ({ withID, currentTypeName, generic }: MismatchErrorProps) => {
+    const _context = traceArg({ withID, currentTypeName, currentArg: generic.name })
 
     return buildReTypeError(ERROR_TYPE.EmptyStringError, _context, generic)
   },
 
-  OutputError: ({ withID, parentName, generic }: MismatchErrorProps) => {
-    const _context = traceArg({ withID, parentName, currentArg: generic.name })
+  OutputError: ({ withID, currentTypeName, generic }: MismatchErrorProps) => {
+    const _context = traceArg({ withID, currentTypeName, currentArg: generic.name })
 
     return buildReTypeError(ERROR_TYPE.OutputError, _context, generic)
   },

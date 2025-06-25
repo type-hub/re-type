@@ -1,6 +1,6 @@
 import type { SafeOmit } from "utilTypes"
 import type { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
-import type { ParentName } from "utils/reTypeError/trace"
+import type { CurrentTypeName } from "utils/reTypeError/trace"
 import { genericArgsInvocation } from "./genericArgs"
 
 export const typeDeclaration = ({
@@ -16,7 +16,7 @@ export const typeDeclaration = ({
 }): string => `${docs}
 type ${typeName}<${genericsDeclarations}> = ${body}`
 
-type Props = Partial<ParentName> & SafeOmit<PARSED_TYPE_DECLARATION, "body">
+type Props = SafeOmit<PARSED_TYPE_DECLARATION, "body"> & { currentTypeName?: CurrentTypeName }
 
-export const typeInvocation = ({ typeName, generics, parentName }: Props): string =>
-  `${typeName}<${genericArgsInvocation(generics, parentName)}>`
+export const typeInvocation = ({ typeName, generics, currentTypeName }: Props): string =>
+  `${typeName}<${genericArgsInvocation(generics, currentTypeName)}>`

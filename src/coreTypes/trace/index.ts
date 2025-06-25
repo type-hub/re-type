@@ -1,4 +1,4 @@
 export type Trace<
   Context extends string,
-  ParentName extends string
-> = `${Context}->${ParentName}`
+  CurrentTypeName extends string
+> = `${Context}->${CurrentTypeName}`

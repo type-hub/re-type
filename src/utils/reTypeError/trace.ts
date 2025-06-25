@@ -1,19 +1,19 @@
 import { CONTEXT } from "utils/consts"
 import { uuid } from "./uuid"
 
-export type ParentName = { parentName: string }
+export type CurrentTypeName = string
 
 // prettier-ignore
 export type TraceProps =
-  & ParentName
-  & {
+  {
+    currentTypeName: CurrentTypeName
     currentArg: string
     withID?: boolean
   }
 
 const contextLiteral = `${"${" + CONTEXT + "}"}`
 
-export const traceArg = ({ withID, parentName, currentArg }: TraceProps): string =>
-  `\`${contextLiteral}->${parentName}->${currentArg}${withID ? `::${uuid()}` : ""}\``
+export const traceArg = ({ withID, currentTypeName, currentArg }: TraceProps): string =>
+  `\`${contextLiteral}->${currentTypeName}->${currentArg}${withID ? `::${uuid()}` : ""}\``
 
-export const trace = ({ parentName }: ParentName): string => `\`${contextLiteral}->${parentName}\``
+export const trace = (currentTypeName: CurrentTypeName): string => `\`${contextLiteral}->${currentTypeName}\``

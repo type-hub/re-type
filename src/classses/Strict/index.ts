@@ -5,7 +5,7 @@ import type { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"
 import { parseTypeDeclaration } from "utils/parseTypeDeclarations"
 import type { WITH_CONTEXT } from "utils/resolveGenerics"
 import { resolveGenerics } from "utils/resolveGenerics"
-import type { ParentName } from "utils/reTypeError/trace"
+import type { CurrentTypeName } from "utils/reTypeError/trace"
 import { trace } from "utils/reTypeError/trace"
 import { typeBuilder } from "utils/typeBuilder"
 
@@ -22,7 +22,7 @@ export class Strict {
     const docs = createJsDocs({ typeName, generics })
     const genericsDeclarations = typeBuilder.genericArgsDeclaration({ lax: true, generics })
     const body = this.makeStrictLaxBody({
-      parentName: typeName,
+      currentTypeName: typeName,
     })
 
     return typeBuilder.typeDeclaration({
@@ -34,7 +34,7 @@ export class Strict {
   }
 
   // TODO: import validation modules keys
-  protected makeStrictLaxBody({ parentName }: ParentName): string {
+  protected makeStrictLaxBody({ currentTypeName }: { currentTypeName: CurrentTypeName }): string {
     // TODO: mismatch error could be more detailed and reuse validation (what it should be)
     // TODO: Kamils class
     const ValidationType = "ValidateFlatTuple$"
@@ -45,7 +45,7 @@ export class Strict {
     const genericsInvocationWithoutContext = typeBuilder.genericArgsInvocation(rejectContext(generics))
 
     const typeName = resolveEitherLaxName(this.parsedType.typeName)
-    const contextString = trace({ parentName })
+    const contextString = trace(currentTypeName)
 
     const typeDef = `${typeName}<
   // Trace

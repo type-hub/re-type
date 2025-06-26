@@ -1,9 +1,7 @@
 import * as fs from "fs"
 import * as path from "path"
 
-export const isTypeScriptFile = (fileName: string): boolean => {
-  return fileName.endsWith(".ts") && !fileName.endsWith(".d.ts")
-}
+export const isTypeScriptFile = (fileName: string): boolean => fileName.endsWith(".ts") && !fileName.endsWith(".d.ts")
 
 export const collectTypeFiles = (dir: string): string[] => {
   const files: string[] = []

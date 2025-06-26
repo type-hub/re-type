@@ -1,3 +1,8 @@
+
+  import type { ErrorsLookup } from "coreTypes/errors" // TODO: Hardcoded path, should be replaced with a dynamic import
+  import type { BYPASS_MODES } from "coreTypes/validators" 
+  
+
 export class TypeUtils {
     
   ReTypeError(_ErrorType: keyof ErrorsLookup, Context: string, Value, Constraint = unknown): string { 
@@ -16,12 +21,16 @@ export class TypeUtils {
     return `FilterError$<${T}>`
   }
 
-  Trace(Context: string, Name: string, Next: string = ""): string { 
-    return `Trace<${Context}, ${Name}, ${Next}>`
+  Trace(Context: string, ParentName: string): string { 
+    return `Trace<${Context}, ${ParentName}>`
   }
 
   _FlatValidate$(T, CX: string, BypassMode: BYPASS_MODES = BypassModes["off"]): string { 
     return `_FlatValidate$<${T}, ${CX}, ${BypassMode}>`
+  }
+
+  ValidateArr(Data: unknown[], Acc, Context: string, Index: any[] = []): string { 
+    return `ValidateArr<${Data}, ${Acc}, ${Context}, ${Index}>`
   }
 
   Validate$(T, CX: string = ""): string { 
@@ -32,8 +41,8 @@ export class TypeUtils {
     return `EitherValidate<${T}, ${CX}>`
   }
 
-  ValidateArr$(Args: unknown[], Context: string, Index: any[] = []): string { 
-    return `ValidateArr$<${Args}, ${Context}, ${Index}>`
+  ValidateFlatTuple$(Args: unknown[], Context: string, Index: any[] = []): string { 
+    return `ValidateFlatTuple$<${Args}, ${Context}, ${Index}>`
   }
 
   ValidateEmptyString$(T): string { 
@@ -88,5 +97,5 @@ export class TypeUtils {
     return `CH_ValidateUsableSting$<${T}>`
   }
   
-  }
+}
   

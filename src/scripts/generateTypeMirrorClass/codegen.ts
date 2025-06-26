@@ -1,8 +1,7 @@
-import type { METHOD } from "./typeProcessing/types"
+import type { GENERIC, METHOD } from "./typeProcessing/types"
+import { maybeRegisterConstraintImport } from "./utils/import"
 
-export const generateParamsDeclaration = (
-  generics: { name: string; constraint?: string; defaultValue?: string }[],
-): string =>
+export const generateParamsDeclaration = (generics: GENERIC[]): string =>
   generics
     .map(
       ({ name, constraint, defaultValue }) =>
@@ -10,12 +9,17 @@ export const generateParamsDeclaration = (
     )
     .join(", ")
 
-export const generateParamsInterpolation = (generics: { name: string }[]): string =>
+export const generateParamsInterpolation = (generics: Pick<GENERIC, "name">[]): string =>
   generics.map((g) => `\${${g.name}}`).join(", ")
 
 export const generateMethod = ({ name, generics }: METHOD): string => {
   const paramsDecl = generateParamsDeclaration(generics)
   const paramsInterp = generateParamsInterpolation(generics)
+
+  generics.forEach(({ constraint }) => {
+    maybeRegisterConstraintImport(constraint)
+  })
+
   return `
   ${name}(${paramsDecl}): string { 
     return \`${name}<${paramsInterp}>\`
@@ -25,8 +29,13 @@ export const generateMethod = ({ name, generics }: METHOD): string => {
 export const generateClassBody = (methods: METHOD[]): string => methods.map(generateMethod).join("\n")
 
 export const generateOutput = (methods: METHOD[]): string =>
-  `export class TypeUtils {
+  `
+  import type { ErrorsLookup } from "coreTypes/errors" // TODO: Hardcoded path, should be replaced with a dynamic import
+  import type { BYPASS_MODES } from "coreTypes/validators" 
+  
+
+export class TypeUtils {
     ${generateClassBody(methods)}
   
-  }
+}
   `

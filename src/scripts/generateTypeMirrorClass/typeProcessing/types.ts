@@ -1,17 +1,23 @@
-import { GENERIC } from "../../../utils/parseTypeDeclarations"
+import type { GENERIC } from "../../../utils/parseTypeDeclarations"
 
-type METHOD = {
+export type METHOD = {
   name: string
   generics: GENERIC[]
 }
 
-type BROKEN_TYPE = {
+export type BROKEN_TYPE = {
   name: string
 }
 
-type PARSE_RESULT = {
-  parsedTypes: METHOD[]
-  failedTypes: BROKEN_TYPE[]
+export type SINGLE_PARSE_RESULT = {
+  parsed: METHOD
+  failed: BROKEN_TYPE
 }
 
-export type { GENERIC, METHOD, BROKEN_TYPE, PARSE_RESULT }
+type ConvertValuesToArray<T> = {
+  [K in keyof T]: T[K][]
+}
+
+export type PARSE_RESULT = ConvertValuesToArray<SINGLE_PARSE_RESULT>
+
+export type { GENERIC }

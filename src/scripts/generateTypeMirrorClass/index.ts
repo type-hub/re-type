@@ -1,7 +1,7 @@
 import * as ts from "typescript"
 import * as fs from "fs"
 import * as path from "path"
-import { collectTypeFiles } from "./fileUtils"
+import { collectTypeFiles } from "./utils/file"
 import { processAllFiles } from "./typeProcessing/processing"
 import { generateOutput } from "./codegen"
 
@@ -12,13 +12,13 @@ const outputFilePath = path.resolve(process.cwd(), "src/classses/generated/TypeM
 
 const main = (): void => {
   const allFiles = collectTypeFiles(typesDir)
-  const { parsedTypes, failedTypes } = processAllFiles(allFiles, SCRIPT_TARGET)
-  const output = generateOutput(parsedTypes)
+  const { parsed, failed } = processAllFiles(allFiles, SCRIPT_TARGET)
+  const output = generateOutput(parsed)
 
   fs.writeFileSync(outputFilePath, output)
 
-  console.log("Broken types:", failedTypes.length)
-  console.log("Broken types names:", failedTypes.map((type) => type.name).join("\n"))
+  console.log("Broken types:", failed.length)
+  console.log("Broken types names:", failed.map((type) => type.name).join("\n"))
 }
 
 main()

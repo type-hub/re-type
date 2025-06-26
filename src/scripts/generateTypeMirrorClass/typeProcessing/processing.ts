@@ -1,24 +1,23 @@
 import * as ts from "typescript"
 import * as fs from "fs"
 import { parseTypeDeclaration } from "../../../utils/parseTypeDeclarations"
-import { cleanTypeDef } from "./clean"
-import { isTypeAlias, isExported } from "./guards"
-import type { METHOD, BROKEN_TYPE, PARSE_RESULT } from "./types"
+import { sanitize } from "./sanitize"
+import { isExported, isTypeAlias } from "./guards"
+import type { BROKEN_TYPE, METHOD, PARSE_RESULT, SINGLE_PARSE_RESULT } from "./types"
 
 const CHARACTER_ENCODING = "utf-8"
 
 export function processExportedTypeAlias(
   node: ts.TypeAliasDeclaration,
   sourceText: string,
-): { parsed?: METHOD; failed?: BROKEN_TYPE } {
+): Partial<SINGLE_PARSE_RESULT> {
   const name = node.name.text
 
   const rawText = sourceText.slice(node.pos, node.end).trim()
-  const cleaned = cleanTypeDef(rawText)
+  const sanitizedTypeDef = sanitize(rawText)
 
   try {
-    const { name, generics } = parseTypeDeclaration(cleaned)
-    return { parsed: { name, generics } }
+    return { parsed: parseTypeDeclaration(sanitizedTypeDef) }
   } catch {
     return { failed: { name } }
   }
@@ -29,36 +28,36 @@ export function visitSourceFile(filePath: string, scriptTarget: ts.ScriptTarget)
 
   const file = ts.createSourceFile(filePath, sourceText, scriptTarget, true)
 
-  const parsedTypes: METHOD[] = []
-  const failedTypes: BROKEN_TYPE[] = []
+  const parsed: METHOD[] = []
+  const failed: BROKEN_TYPE[] = []
 
   file.forEachChild((node) => {
     if (isTypeAlias(node) && isExported(node)) {
       const result = processExportedTypeAlias(node, sourceText)
 
       if (result.parsed) {
-        parsedTypes.push(result.parsed)
+        parsed.push(result.parsed)
       }
 
       if (result.failed) {
-        failedTypes.push(result.failed)
+        failed.push(result.failed)
       }
     }
   })
 
-  return { parsedTypes, failedTypes }
+  return { parsed, failed }
 }
 
 export function processAllFiles(filePaths: string[], scriptTarget: ts.ScriptTarget): PARSE_RESULT {
   return filePaths.reduce<PARSE_RESULT>(
     (acc, filePath) => {
-      const { parsedTypes, failedTypes } = visitSourceFile(filePath, scriptTarget)
+      const { parsed, failed } = visitSourceFile(filePath, scriptTarget)
 
-      acc.parsedTypes.push(...parsedTypes)
-      acc.failedTypes.push(...failedTypes)
+      acc.parsed.push(...parsed)
+      acc.failed.push(...failed)
 
       return acc
     },
-    { parsedTypes: [], failedTypes: [] },
+    { parsed: [], failed: [] },
   )
 }

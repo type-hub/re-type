@@ -9,6 +9,7 @@
     "graph:test": "depcruise src",
     "graph:watch": "nodemon --watch src --ext ts --exec \"npm run graph:build\"",
     "graph:serve": "concurrently \"npm run graph:watch\" \"vite\"",
+    "generate-type-mirror": "npx tsx src/scripts/generateTypeMirrorClass",
     "test": "concurrently \"npm run test:vitest\" \"npm run test:tsc\" \"npm run graph:test\"",
     "test:vitest": "vitest run",
     "test:tsc": "tsc --noEmit",
@@ -31,6 +32,7 @@
   },
   "dependencies": {
     "@eslint/js": "^9.25.1",
+    "@types/node": "^24.0.3",
     "@types/ramda": "^0.30.2",
     "eslint-config-prettier": "^10.1.2",
     "globals": "^16.0.0",

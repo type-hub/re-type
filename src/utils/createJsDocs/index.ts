@@ -1,12 +1,12 @@
 import type { SafeOmit } from "utilTypes"
 import type { PARSED_TYPE_DECLARATION } from "../parseTypeDeclarations"
 
-export const createJsDocs = ({ name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">): string => {
+export const createJsDocs = ({ typeName: name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">): string => {
   const params = generics
     .map((generic) => {
-      const x = generic.defaultValue ? `any, fallbacks to ${generic.defaultValue}` : "any"
+      const defaultValue = generic.defaultValue ? `any, fallbacks to ${generic.defaultValue}` : "any"
 
-      return `@template ${generic.name} - ${generic.constraint ? `${generic.constraint}` : x}`
+      return `@template ${generic.name} - ${generic.constraint || defaultValue}`
     })
     .join("\n")
 

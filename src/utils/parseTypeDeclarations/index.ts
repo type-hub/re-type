@@ -7,7 +7,7 @@ export type GENERIC = {
 }
 
 export type PARSED_TYPE_DECLARATION = {
-  name: string
+  typeName: string
   generics: GENERIC[]
   body: string
 }
@@ -20,11 +20,11 @@ export const parseTypeDeclaration = (_typeFunc: string): PARSED_TYPE_DECLARATION
     throw new Error(`parseTypeDeclarations: Type function not found in type definition: ${typeFunc}`)
   }
 
-  const name = match[1]
+  const typeName = match[1]
   const rawArgs = match[2].split(",")
   const body = match[3]
 
-  if (!name) {
+  if (!typeName) {
     throw new Error(`parseTypeDeclarations: Type function name not found in type definition: ${typeFunc}`)
   }
   if (!rawArgs) {
@@ -50,7 +50,7 @@ export const parseTypeDeclaration = (_typeFunc: string): PARSED_TYPE_DECLARATION
   }
 
   return {
-    name,
+    typeName,
     generics,
     body,
   }

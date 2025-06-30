@@ -1,9 +1,9 @@
 import { ImportRegistry } from "services/ImportRegistry"
 import type { GENERIC } from "utils/parseTypeDeclarations"
 import { reTypeError } from "utils/reTypeError"
-import type { ParentName } from "utils/reTypeError/trace"
+import type { CurrentTypeName } from "utils/reTypeError/trace"
 
-export const relaxConstraints = (parentName: ParentName["parentName"]) => (injectedCode: string, generic: GENERIC) => {
+export const relaxConstraints = (currentTypeName: CurrentTypeName) => (injectedCode: string, generic: GENERIC) => {
   const MismatchError = "MismatchError"
   ImportRegistry.addImport(MismatchError)
 
@@ -12,7 +12,7 @@ export const relaxConstraints = (parentName: ParentName["parentName"]) => (injec
     ? ${injectedCode}
     : ${reTypeError[MismatchError]({
       withID: true,
-      parentName,
+      currentTypeName,
       generic,
     })}`
 }

@@ -1,10 +1,10 @@
 import { CONTEXT } from "utils/consts"
 import type { GENERIC } from "utils/parseTypeDeclarations"
-import type { ParentName } from "utils/reTypeError/trace"
+import type { CurrentTypeName } from "utils/reTypeError/trace"
 import { trace } from "utils/reTypeError/trace"
 
-export const supportContextTracing = (parentName?: ParentName["parentName"]) => (generic: GENERIC) =>
-  generic.name === CONTEXT && parentName
+export const supportContextTracing = (currentTypeName?: CurrentTypeName) => (generic: GENERIC) =>
+  generic.name === CONTEXT && currentTypeName
     ? //
-      trace({ parentName })
+      trace(currentTypeName)
     : generic.name

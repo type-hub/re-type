@@ -17,21 +17,21 @@ export class Lax {
 
   public typeDeclaration({ withContext }: WITH_CONTEXT): string {
     const generics = resolveGenerics({ withContext, generics: this.parsedType.generics })
-    const name = resolveLaxName(this.parsedType.name)
-    const docs = createJsDocs({ name, generics })
+    const typeName = resolveLaxName(this.parsedType.typeName)
+    const docs = createJsDocs({ typeName, generics })
     const genericsDeclarations = typeBuilder.genericArgsDeclaration({ lax: true, generics })
     const body = this.makeLaxBody({ withContext: false, withComments: false }) //fix optional params
 
     return typeBuilder.typeDeclaration({
       docs,
-      name,
+      typeName,
       genericsDeclarations,
       body,
     })
   }
 
   public eitherTypeDeclaration({ withContext }: WITH_CONTEXT): string {
-    const targetTypeName = resolveLaxName(this.parsedType.name)
+    const targetTypeName = resolveLaxName(this.parsedType.typeName)
     const typeName = resolveEitherName(targetTypeName)
     const genericsWithError = resolveGenerics({
       withContext,
@@ -39,13 +39,13 @@ export class Lax {
       generics: this.parsedType.generics,
     })
     const genericsWithoutError = resolveGenerics({ withContext, generics: this.parsedType.generics })
-    const docs = createJsDocs({ name: typeName, generics: genericsWithError })
+    const docs = createJsDocs({ typeName, generics: genericsWithError })
     const genericsDeclarations = typeBuilder.genericArgsDeclaration({ generics: genericsWithError, lax: true }) // remove lax, error and context should have validation
 
     const typeInvocation = typeBuilder.typeInvocation({
-      name: targetTypeName,
+      typeName: targetTypeName,
       generics: genericsWithoutError,
-      parentName: typeName,
+      currentTypeName: typeName,
     })
 
     const body = `[_Error] extends [never]
@@ -54,7 +54,7 @@ export class Lax {
 
     return typeBuilder.typeDeclaration({
       docs,
-      name: typeName,
+      typeName,
       genericsDeclarations,
       body,
     })
@@ -66,8 +66,8 @@ export class Lax {
     // TODO: mismatch error could be more detailed and reuse validation (what it should be)
     // TODO: inside validation missing (before return)
 
-    const { generics, name } = this.parsedType
-    const laxName = resolveLaxName(name)
+    const { generics, typeName } = this.parsedType
+    const laxName = resolveLaxName(typeName)
 
     // TODO: move to utils to templater?
     const conditionalTypeBody = generics
@@ -78,9 +78,9 @@ export class Lax {
         //
         typeBuilder.relaxConstraints(laxName),
         typeBuilder.typeInvocation({
-          name,
+          typeName,
           generics: resolveGenerics({ withContext, generics }),
-          // parentName: "laxName",
+          // currentTypeName: "laxName",
         }),
       )
 

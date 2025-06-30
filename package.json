@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "transform": "nodemon --watch src --ext ts --exec \"tsx ./src/test.ts\"",
+    "build:types": "nodemon --watch src --ext ts --exec \"tsx ./src/buildTypes.ts\"",
+    "build:findTypeDeclarations": "nodemon --watch src --ext ts --exec \"tsx ./scripts/findTypeDeclarations.ts\"",
     "graph:build": "depcruise src --output-type dot | dot -T svg | depcruise-wrap-stream-in-html > index.html",
     "graph:test": "depcruise src",
     "graph:watch": "nodemon --watch src --ext ts --exec \"npm run graph:build\"",

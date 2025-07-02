@@ -1,17 +1,14 @@
 import * as fs from "fs"
 import * as path from "path"
-import * as ts from "typescript"
 
 import { collectTsFilePaths } from "tsc/collectTsFilePaths"
 import { generateOutput } from "./codegen"
 import { processAllFiles } from "./typeProcessing/processing"
 
-const SCRIPT_TARGET = ts.ScriptTarget.ES2020
-
 const main = (dirToScan: string, outputFilePath: string): void => {
+  // TODO: convert to functional pattern
   const filePaths = collectTsFilePaths(dirToScan)
-
-  const parsed = processAllFiles(filePaths, SCRIPT_TARGET)
+  const parsed = processAllFiles(filePaths)
 
   console.log(parsed)
   const output = generateOutput(parsed)

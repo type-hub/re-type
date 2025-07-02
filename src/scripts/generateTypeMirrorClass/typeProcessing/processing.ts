@@ -1,63 +1,41 @@
-import * as ts from "typescript"
 import * as fs from "fs"
-import { parseTypeDeclaration } from "../../../utils/parseTypeDeclarations"
-import { sanitize } from "./sanitize"
-import { isExported, isTypeAlias } from "./guards"
-import type { BROKEN_TYPE, METHOD, PARSE_RESULT, SINGLE_PARSE_RESULT } from "./types"
+import { getTypeNodeName } from "tsc/utils"
+import * as ts from "typescript"
+import { type PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "../../../utils/parseTypeDeclarations"
+import { isExportedType, isTypeAlias, isTypeFunction } from "./guards"
 
 const CHARACTER_ENCODING = "utf-8"
 
-export function processExportedTypeAlias(
-  node: ts.TypeAliasDeclaration,
-  sourceText: string,
-): Partial<SINGLE_PARSE_RESULT> {
-  const name = node.name.text
-
-  const rawText = sourceText.slice(node.pos, node.end).trim()
-  const sanitizedTypeDef = sanitize(rawText)
-
-  try {
-    return { parsed: parseTypeDeclaration(sanitizedTypeDef) }
-  } catch {
-    return { failed: { name } }
-  }
-}
-
-export function visitSourceFile(filePath: string, scriptTarget: ts.ScriptTarget): PARSE_RESULT {
+export function visitSourceFile(filePath: string, scriptTarget: ts.ScriptTarget): PARSED_TYPE_DECLARATION[] {
   const sourceText = fs.readFileSync(filePath, CHARACTER_ENCODING)
-
   const file = ts.createSourceFile(filePath, sourceText, scriptTarget, true)
 
-  const parsed: METHOD[] = []
-  const failed: BROKEN_TYPE[] = []
+  const parsed: PARSED_TYPE_DECLARATION[] = []
 
   file.forEachChild((node) => {
-    if (isTypeAlias(node) && isExported(node)) {
-      const result = processExportedTypeAlias(node, sourceText)
+    if (isTypeAlias(node) && isTypeFunction(node) && isExportedType(node)) {
+      // Get type parameter information including defaults
+      // const typeParams = getTypeParameterInfo(node, sourceText)
+      // console.warn(`Type ${node.name.text} has parameters:`, typeParams)
+      // console.warn(`Type ${node.name.text} has body:`, typeBody)
 
-      if (result.parsed) {
-        parsed.push(result.parsed)
-      }
+      // const result = processExportedTypeAlias(node, sourceText, filePath)
 
-      if (result.failed) {
-        failed.push(result.failed)
-      }
+      // TODO: convert to pipe
+      const nodeText = getTypeNodeName(sourceText)(node)
+      const result = parseTypeDeclaration(nodeText)
+
+      parsed.push(result)
     }
   })
 
-  return { parsed, failed }
+  return parsed
 }
 
-export function processAllFiles(filePaths: string[], scriptTarget: ts.ScriptTarget): PARSE_RESULT {
-  return filePaths.reduce<PARSE_RESULT>(
-    (acc, filePath) => {
-      const { parsed, failed } = visitSourceFile(filePath, scriptTarget)
+export function processAllFiles(filePaths: string[], scriptTarget: ts.ScriptTarget): PARSED_TYPE_DECLARATION[] {
+  return filePaths.reduce<PARSED_TYPE_DECLARATION[]>((acc, filePath) => {
+    const parsed = visitSourceFile(filePath, scriptTarget)
 
-      acc.parsed.push(...parsed)
-      acc.failed.push(...failed)
-
-      return acc
-    },
-    { parsed: [], failed: [] },
-  )
+    return [...acc, ...parsed]
+  }, [])
 }

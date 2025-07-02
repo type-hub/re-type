@@ -6,11 +6,11 @@
   "scripts": {
     "build:types": "nodemon --watch src --ext ts --exec \"tsx ./src/buildTypes.ts\"",
     "build:findTypeDeclarations": "nodemon --watch src --ext ts --exec \"tsx ./scripts/findTypeDeclarations.ts\"",
+    "build:typeMirror": "nodemon --watch src --ext ts --exec \"npx tsx src/scripts/generateTypeMirrorClass\"",
     "graph:build": "depcruise src --output-type dot | dot -T svg | depcruise-wrap-stream-in-html > index.html",
     "graph:test": "depcruise src",
     "graph:watch": "nodemon --watch src --ext ts --exec \"npm run graph:build\"",
     "graph:serve": "concurrently \"npm run graph:watch\" \"vite\"",
-    "generate-type-mirror": "npx tsx src/scripts/generateTypeMirrorClass",
     "test": "concurrently \"npm run test:vitest\" \"npm run test:tsc\" \"npm run graph:test\"",
     "test:vitest": "vitest run",
     "test:tsc": "tsc --noEmit",

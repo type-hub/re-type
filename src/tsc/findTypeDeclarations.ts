@@ -1,3 +1,4 @@
+import { isExportedTypeFunction } from "scripts/generateTypeMirrorClass/typeProcessing/guards"
 import * as ts from "typescript"
 import { collectTsFilePaths } from "./collectTsFilePaths"
 import { createSourceFileFromPath } from "./utils"
@@ -11,8 +12,10 @@ export const findTypeDeclarations = (rootDir: string, dirsToScan: string, myType
     const { sourceFile } = createSourceFileFromPath(filePath)
 
     ts.forEachChild(sourceFile, (node) => {
-      if (ts.isTypeAliasDeclaration(node) && node.modifiers?.some((mod) => mod.kind === ts.SyntaxKind.ExportKeyword)) {
+      if (isExportedTypeFunction(node)) {
         const typeName = node.name.escapedText
+
+        // TODO: remove
         console.log(
           typeName,
           rootDir,

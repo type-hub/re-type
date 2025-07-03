@@ -10,13 +10,13 @@ const sanitize = (nodeText: string): string =>
     .replace(regexes.lineComment, "")
     .trim()
 
-export const getTypeNodeName =
+export const getNodeText =
   (sourceText: string) =>
   (node: ts.Node): string =>
     sanitize(sourceText.slice(node.pos, node.end))
 
-export const getTypeNodeBody = (node: ts.TypeAliasDeclaration, sourceText: string): string =>
-  getTypeNodeName(sourceText)(node.type)
+export const getNodeBody = (node: ts.TypeAliasDeclaration, sourceText: string): string =>
+  getNodeText(sourceText)(node.type)
 
 export const createSourceFile = (sourceText: string, filePath: string = "any.ts"): ts.SourceFile =>
   // TODO: do we need true below?
@@ -38,7 +38,7 @@ export const getGenericsFromNode = (
   }
 
   return node.typeParameters.map((tp): GENERIC => {
-    const maybeGetNodeText = maybe(getTypeNodeName(sourceText))
+    const maybeGetNodeText = maybe(getNodeText(sourceText))
 
     return {
       name: tp.name.text,

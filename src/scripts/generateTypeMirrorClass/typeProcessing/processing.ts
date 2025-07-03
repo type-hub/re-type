@@ -1,6 +1,6 @@
-import { createSourceFileFromPath, getTypeNodeName } from "tsc/utils"
+import { createSourceFileFromPath, getNodeText } from "tsc/utils"
 import { type PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "../../../utils/parseTypeDeclarations"
-import { isExportedType, isTypeAlias, isTypeFunction } from "./guards"
+import { isExportedTypeFunction } from "./guards"
 
 const processSingleFile = (filePath: string): PARSED_TYPE_DECLARATION[] => {
   const { sourceText, sourceFile } = createSourceFileFromPath(filePath)
@@ -9,9 +9,9 @@ const processSingleFile = (filePath: string): PARSED_TYPE_DECLARATION[] => {
   const parsed: PARSED_TYPE_DECLARATION[] = []
 
   sourceFile.forEachChild((node) => {
-    if (isTypeAlias(node) && isTypeFunction(node) && isExportedType(node)) {
+    if (isExportedTypeFunction(node)) {
       // TODO: convert to pipe
-      const nodeText = getTypeNodeName(sourceText)(node)
+      const nodeText = getNodeText(sourceText)(node)
       const result = parseTypeDeclaration(nodeText)
 
       parsed.push(result)

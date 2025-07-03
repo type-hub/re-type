@@ -1,5 +1,5 @@
-import { isTypeAlias, isTypeFunction } from "scripts/generateTypeMirrorClass/typeProcessing/guards"
-import { createSourceFile, getGenericsFromNode, getTypeNodeBody } from "tsc/utils"
+import { isTypeFunction } from "scripts/generateTypeMirrorClass/typeProcessing/guards"
+import { createSourceFile, getGenericsFromNode, getNodeBody } from "tsc/utils"
 
 export type GENERIC = {
   name: string
@@ -20,17 +20,14 @@ export const parseTypeDeclaration = (typeFunc: string): PARSED_TYPE_DECLARATION 
   createSourceFile(typeFunc)
     //
     .forEachChild((node) => {
-      // console.log("typeParameters", node.kind) // , "typeParameters" in node && node.typeParameters?.length)
-
-      if (isTypeAlias(node) && isTypeFunction(node)) {
+      // TODO: isExportedTypeFunction instead?
+      if (isTypeFunction(node)) {
         _parsed.push({
           // TODO: convert to parseNodeType()
           typeName: node.name.text,
           generics: getGenericsFromNode(node, typeFunc),
-          body: getTypeNodeBody(node, typeFunc),
+          body: getNodeBody(node, typeFunc),
         })
-
-        // console.warn(`Type ${node.name.text} has body:`, typeBody)
       }
     })
 

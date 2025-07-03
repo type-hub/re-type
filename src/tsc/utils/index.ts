@@ -1,5 +1,6 @@
 import { regexes } from "regexes"
 import ts from "typescript"
+import { maybe } from "utils/funcProg"
 import type { GENERIC } from "utils/parseTypeDeclarations"
 
 const sanitize = (nodeText: string): string =>
@@ -29,23 +30,13 @@ export const getGenericsFromNode = (
     return []
   }
 
-  return node.typeParameters.map((tp) => {
-    // TODO: fix with functional patterns
-    const result: GENERIC = {
+  return node.typeParameters.map((tp): GENERIC => {
+    const maybeGetNodeText = maybe(getTypeNodeName(sourceText))
+
+    return {
       name: tp.name.text,
+      constraint: maybeGetNodeText(tp.constraint),
+      defaultValue: maybeGetNodeText(tp.default),
     }
-
-    const _getNodeText = getTypeNodeName(sourceText)
-
-    if (tp.constraint) {
-      // console.log("constraint----------------", _getNodeText(tp.constraint))
-      result.constraint = _getNodeText(tp.constraint)
-    }
-
-    if (tp.default) {
-      result.defaultValue = _getNodeText(tp.default)
-    }
-
-    return result
   })
 }

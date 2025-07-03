@@ -17,8 +17,7 @@ const main = (dirToScan: string, outputFilePath: string): void => {
 }
 
 main(
-  // TODO: Remove typo 'classSes' when will be fixed in the codebase
+  //
   path.resolve(process.cwd(), "src/coreTypes"),
-  // path.resolve(process.cwd(), "src/classses/generated/TypeMirror/index.ts"),
   path.resolve(process.cwd(), "dist/TypeMirror.ts"),
 )

@@ -1,4 +1,4 @@
-import { resolveEitherName, resolveLaxName } from "classses/utils"
+import { resolveEitherName, resolveLaxName } from "classes/utils"
 import { prop } from "ramda"
 import { createJsDocs } from "utils/createJsDocs"
 import type { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"

@@ -3,12 +3,8 @@ import * as ts from "typescript"
 import { collectTsFilePaths } from "./collectTsFilePaths"
 import { createSourceFile } from "./utils"
 
-export const findTypeDeclarations = (rootDir: string, dirsToScan: string[], myType: string): string[] => {
-  // TODO: BROKEN
+export const findTypeDeclarations = (rootDir: string, dirsToScan: string, myType: string): string[] => {
   const filePaths = collectTsFilePaths(dirsToScan)
-
-  // console.log(`Total TypeScript files found: ${filePaths.length}`)
-  // filePaths.forEach((file) => console.log(`  ${file}`))
 
   const defPaths: string[] = []
 

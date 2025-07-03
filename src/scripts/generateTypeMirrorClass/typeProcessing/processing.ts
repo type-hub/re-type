@@ -1,5 +1,5 @@
-import { createSourceFileFromPath, getNodeText } from "tsc/utils"
-import { type PARSED_TYPE_DECLARATION, parseTypeDeclaration } from "../../../utils/parseTypeDeclarations"
+import { createSourceFileFromPath } from "tsc/utils"
+import { type PARSED_TYPE_DECLARATION, parseNode } from "utils/parseTypeDeclarations"
 import { isExportedTypeFunction } from "./guards"
 
 const processSingleFile = (filePath: string): PARSED_TYPE_DECLARATION[] => {
@@ -10,14 +10,13 @@ const processSingleFile = (filePath: string): PARSED_TYPE_DECLARATION[] => {
 
   sourceFile.forEachChild((node) => {
     if (isExportedTypeFunction(node)) {
-      // TODO: convert to pipe
-      const nodeText = getNodeText(sourceText)(node)
-      const result = parseTypeDeclaration(nodeText)
+      const result = parseNode(sourceText, node)
 
       parsed.push(result)
     }
   })
 
+  // TODO: check lengths
   return parsed
 }
 

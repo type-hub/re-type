@@ -1,7 +1,6 @@
-import * as fs from "fs"
 import * as ts from "typescript"
 import { collectTsFilePaths } from "./collectTsFilePaths"
-import { createSourceFile } from "./utils"
+import { createSourceFileFromPath } from "./utils"
 
 export const findTypeDeclarations = (rootDir: string, dirsToScan: string, myType: string): string[] => {
   const filePaths = collectTsFilePaths(dirsToScan)
@@ -9,7 +8,7 @@ export const findTypeDeclarations = (rootDir: string, dirsToScan: string, myType
   const defPaths: string[] = []
 
   for (const filePath of filePaths) {
-    const sourceFile = createSourceFile(fs.readFileSync(filePath, "utf8"))
+    const { sourceFile } = createSourceFileFromPath(filePath)
 
     ts.forEachChild(sourceFile, (node) => {
       if (ts.isTypeAliasDeclaration(node) && node.modifiers?.some((mod) => mod.kind === ts.SyntaxKind.ExportKeyword)) {
@@ -22,8 +21,7 @@ export const findTypeDeclarations = (rootDir: string, dirsToScan: string, myType
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         if (typeName === myType) {
-          // defPaths.push(filePath.replace(rootDir, ".").replace(rootDir.replace("./", ""), "."))
-          defPaths.push(filePath) ///.replace(rootDir, ".").replace(rootDir.replace("./", ""), "."))
+          defPaths.push(filePath)
         }
       }
     })

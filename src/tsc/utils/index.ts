@@ -1,6 +1,6 @@
 import { regexes } from "regexes"
 import ts from "typescript"
-import { maybe } from "utils/funcProg"
+import { maybe, readFileSync } from "utils/funcProg"
 import type { GENERIC } from "utils/parseTypeDeclarations"
 
 const sanitize = (nodeText: string): string =>
@@ -21,6 +21,13 @@ export const getTypeNodeBody = (node: ts.TypeAliasDeclaration, sourceText: strin
 export const createSourceFile = (sourceText: string, filePath: string = "any.ts"): ts.SourceFile =>
   // TODO: do we need true below?
   ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.ESNext, true)
+
+export const createSourceFileFromPath = (filePath: string): { sourceText: string; sourceFile: ts.SourceFile } => {
+  const sourceText = readFileSync(filePath)
+  const sourceFile = createSourceFile(sourceText)
+
+  return { sourceText, sourceFile }
+}
 
 export const getGenericsFromNode = (
   node: ts.InterfaceDeclaration | ts.TypeAliasDeclaration,

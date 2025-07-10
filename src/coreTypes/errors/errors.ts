@@ -67,7 +67,7 @@ export type ReTypeError<
   _ErrorType extends keyof ErrorsLookup,
   Context extends string,
   Value,
-  _Constraint = unknown
+  _Constraint = "TODO:unknown"
 > = {
   __type: _ErrorType
   __message: ErrorsLookup[_ErrorType]["msg"]
@@ -80,16 +80,16 @@ export type ReTypeError<
 // -----------------------
 
 // prettier-ignore
-export type NeverError      <CX extends string, T, _Constraint = unknown> = ReTypeError<"NeverError",       Trace<CX, "NeverError">, T, _Constraint>
+export type NeverError      <CX extends string, T, _Constraint = "TODO:unknown"> = ReTypeError<"NeverError",       Trace<CX, "NeverError">, T, _Constraint>
 // prettier-ignore
-export type AnyError        <CX extends string, T, _Constraint = unknown> = ReTypeError<"AnyError",         Trace<CX, "AnyError">, T, _Constraint>
+export type AnyError        <CX extends string, T, _Constraint = "TODO:unknown"> = ReTypeError<"AnyError",         Trace<CX, "AnyError">, T, _Constraint>
 // prettier-ignore
-export type UnknownError    <CX extends string, T, _Constraint = unknown> = ReTypeError<"UnknownError",     Trace<CX, "UnknownError">, T, _Constraint>
+export type UnknownError    <CX extends string, T, _Constraint = "TODO:unknown"> = ReTypeError<"UnknownError",     Trace<CX, "UnknownError">, T, _Constraint>
 // prettier-ignore
-export type MismatchError   <CX extends string, T, _Constraint = unknown> = ReTypeError<"MismatchError",    Trace<CX, "MismatchError">, T, _Constraint>
+export type MismatchError   <CX extends string, T, _Constraint = "TODO:unknown"> = ReTypeError<"MismatchError",    Trace<CX, "MismatchError">, T, _Constraint>
 // prettier-ignore
-export type NonLiteralError <CX extends string, T, _Constraint = unknown> = ReTypeError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T, _Constraint>
+export type NonLiteralError <CX extends string, T, _Constraint = "TODO:unknown"> = ReTypeError<"NonLiteralError",  Trace<CX, "NonLiteralError">, T, _Constraint>
 // prettier-ignore
-export type EmptyStringError<CX extends string, T, _Constraint = unknown> = ReTypeError<"EmptyStringError", Trace<CX, "EmptyStringError">, T, _Constraint>
+export type EmptyStringError<CX extends string, T, _Constraint = "TODO:unknown"> = ReTypeError<"EmptyStringError", Trace<CX, "EmptyStringError">, T, _Constraint>
 // prettier-ignore
-export type OpenTypeError   <CX extends string, T, _Constraint = unknown> = ReTypeError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T, _Constraint>
+export type OpenTypeError   <CX extends string, T, _Constraint = "TODO:unknown"> = ReTypeError<"OpenTypeError",    Trace<CX, "OpenTypeError">, T, _Constraint>

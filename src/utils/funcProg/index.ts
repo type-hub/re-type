@@ -6,7 +6,7 @@ type PartialTuple<T extends any[]> = T extends [infer Head, ...infer Tail]
     [Head?, ...PartialTuple<Tail>]
   : []
 
-function maybe<Func extends (...args: any[]) => any>(func: Func) {
+export function maybe<Func extends (...args: any[]) => any>(func: Func) {
   return <MaybeArgs extends PartialTuple<Parameters<Func>>>(
     ...args: MaybeArgs
   ): MaybeArgs extends Parameters<Func>
@@ -16,7 +16,7 @@ function maybe<Func extends (...args: any[]) => any>(func: Func) {
     : undefined => {
     if (args.some((arg) => arg === undefined)) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return undefined as any // X<Func>
+      return undefined as any
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -53,6 +53,7 @@ const _d = d
 //    ^?
 
 // 5. to many args
+// @ts-expect-error too many args
 const e = test("1", 1, "")
 //    ^?
 

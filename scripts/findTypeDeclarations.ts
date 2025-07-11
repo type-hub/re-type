@@ -16,7 +16,7 @@ import { findTypeDeclarations } from "../src/tsc"
 // )
 
 const rootDir = "./src"
-const dirsToScan = ["./src", "./tests", "./lib"]
+const dirsToScan = "./src"
 const myType = "ValidateFlatTuple$"
 const declarationPaths = findTypeDeclarations(rootDir, dirsToScan, myType)
 

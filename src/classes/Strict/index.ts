@@ -1,4 +1,4 @@
-import { rejectContext, resolveEitherLaxName, resolveStrictLaxName } from "classses/utils"
+import { rejectContext, resolveEitherLaxName, resolveStrictLaxName } from "classes/utils"
 import { ImportRegistry } from "services/ImportRegistry"
 import { createJsDocs } from "utils/createJsDocs"
 import type { PARSED_TYPE_DECLARATION } from "utils/parseTypeDeclarations"

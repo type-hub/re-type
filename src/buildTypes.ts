@@ -1,5 +1,5 @@
-import { Lax } from "classses/Lax"
-import { Strict } from "classses/Strict"
+import { Lax } from "classes/Lax"
+import { Strict } from "classes/Strict"
 import fs from "node:fs"
 import { toPairs } from "ramda"
 import { ImportRegistry } from "services/ImportRegistry"

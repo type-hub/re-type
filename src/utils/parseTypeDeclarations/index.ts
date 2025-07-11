@@ -1,4 +1,6 @@
-import { regexes } from "regexes"
+import { isTypeFunction } from "scripts/generateTypeMirrorClass/typeProcessing/guards"
+import { createSourceFile, getGenericsFromNode, getNodeBody, getNodeText } from "tsc/utils"
+import type ts from "typescript"
 
 export type GENERIC = {
   name: string
@@ -12,46 +14,47 @@ export type PARSED_TYPE_DECLARATION = {
   body: string
 }
 
-export const parseTypeDeclaration = (_typeFunc: string): PARSED_TYPE_DECLARATION => {
-  const typeFunc = _typeFunc.trim()
-  const match = typeFunc.match(regexes.extractTypesAndValidations)
+const _parseNode = (node: ts.TypeAliasDeclaration, typeFuncDef: string): PARSED_TYPE_DECLARATION => ({
+  typeName: node.name.text,
+  generics: getGenericsFromNode(node, typeFuncDef),
+  body: getNodeBody(node, typeFuncDef),
+})
 
-  if (!match || !match[1] || !match[2] || !match[3]) {
-    throw new Error(`parseTypeDeclarations: Type function not found in type definition: ${typeFunc}`)
-  }
+export const parseTypeDeclaration = (typeFuncDef: string): PARSED_TYPE_DECLARATION => {
+  // TODO: use SET instead of array
+  const _parsed: PARSED_TYPE_DECLARATION[] = []
 
-  const typeName = match[1]
-  const rawArgs = match[2].split(",")
-  const body = match[3]
-
-  if (!typeName) {
-    throw new Error(`parseTypeDeclarations: Type function name not found in type definition: ${typeFunc}`)
-  }
-  if (!rawArgs) {
-    throw new Error(`parseTypeDeclarations: Type function args not found in type definition: ${typeFunc}`)
-  }
-  if (!body) {
-    throw new Error(`parseTypeDeclarations: Type function body not found in type definition: ${typeFunc}`)
-  }
-
-  const generics: GENERIC[] = []
-
-  for (let i = 0; i < rawArgs.length; i++) {
-    const arg = rawArgs[i]
-
-    generics.push({
-      // @ts-expect-error arg is not undefined
-      name: arg.split("extends")[0].split("=")[0].trim(),
-      // @ts-expect-error arg is not undefined
-      constraint: arg.split("extends")[1]?.split("=")[0].trim(),
-      // @ts-expect-error arg is not undefined
-      defaultValue: arg.split("=")[1]?.trim(),
+  createSourceFile(typeFuncDef)
+    //
+    .forEachChild((node) => {
+      // TODO: isExportedTypeFunction instead?
+      if (isTypeFunction(node)) {
+        _parsed.push(_parseNode(node, typeFuncDef))
+      }
     })
+
+  const parsed = _parsed[0]
+
+  if (!parsed) {
+    throw new Error(`parseTypeDeclarations: Type function not found in type definition: ${typeFuncDef}`)
   }
 
-  return {
-    typeName,
-    generics,
-    body,
+  if (!parsed.typeName) {
+    throw new Error(`parseTypeDeclarations: Type function NAME not found in type definition: ${typeFuncDef}`)
   }
+  if (!parsed.generics) {
+    throw new Error(`parseTypeDeclarations: Type function ARGS not found in type definition: ${typeFuncDef}`)
+  }
+  if (!parsed.body) {
+    throw new Error(`parseTypeDeclarations: Type function BODY not found in type definition: ${typeFuncDef}`)
+  }
+
+  return parsed
+}
+
+// TODO: cumbersome logic: node -> text -> node -> _parseNode
+export const parseNode = (sourceText: string, node: ts.Node): PARSED_TYPE_DECLARATION => {
+  const typeFuncDef = getNodeText(sourceText)(node)
+
+  return parseTypeDeclaration(typeFuncDef)
 }

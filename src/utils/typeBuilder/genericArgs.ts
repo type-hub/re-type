@@ -2,13 +2,23 @@ import { P, match } from "ts-pattern"
 import { CONTEXT, CONTEXT_DECLARATION } from "utils/consts"
 import type { GENERIC } from "utils/parseTypeDeclarations"
 import type { CurrentTypeName } from "utils/reTypeError/trace"
+import type { Brand } from "utilTypes"
 import { supportContextTracing } from "./utils"
 
-export const genericArgsDeclaration = ({ generics, lax }: { generics: GENERIC[]; lax?: boolean }): string =>
+export type GENERIC_ARGS_DECLARATION = Brand<string, "GENERIC_ARGS_DECLARATION">
+
+export const genericArgsDeclaration = ({
+  generics,
+  lax,
+}: {
+  generics: GENERIC[]
+  lax?: boolean
+}): GENERIC_ARGS_DECLARATION =>
   generics
     .map((generic) =>
       // TODO: dirty, support context appropriately
       match([lax || false, generic])
+        .returnType<string>()
         // LAX TRUE
         .with([true, { name: P.string, defaultValue: P.string }], ([_, g]) => `${g.name} = ${g.defaultValue}`)
         // .with([true, { name: P.string, constraint: P.string }], ([_, g]) => `${g.name} extends ${g.constraint}`)
@@ -23,10 +33,15 @@ export const genericArgsDeclaration = ({ generics, lax }: { generics: GENERIC[];
         .with([false, { name: P.string }], ([_, g]) => g.name)
         .exhaustive(),
     )
-    .join(", ")
+    .join(", ") as GENERIC_ARGS_DECLARATION
 
-export const genericArgsInvocation = (generics: GENERIC[], currentTypeName?: CurrentTypeName): string =>
+export type GENERIC_ARGS_INVOCATION = Brand<string, "GENERIC_ARGS_INVOCATION">
+
+export const genericArgsInvocation = (
+  generics: GENERIC[],
+  currentTypeName?: CurrentTypeName,
+): GENERIC_ARGS_INVOCATION =>
   generics
     //
     .map(supportContextTracing(currentTypeName))
-    .join(", ")
+    .join(", ") as GENERIC_ARGS_INVOCATION

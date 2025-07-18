@@ -1,15 +1,15 @@
 import type {
-  ErrorsLookup,
+  ERRORS_LOOKUP,
   NeverError,
 } from "./errors"
 
 export type GENERIC_ERROR = {
-  __type: keyof ErrorsLookup
-  __message: ErrorsLookup[keyof ErrorsLookup]["msg"]
-  __url: ErrorsLookup[keyof ErrorsLookup]["url"]
-  __context: string
+  readonly __type: keyof ERRORS_LOOKUP
+  readonly __message: ERRORS_LOOKUP[keyof ERRORS_LOOKUP]["msg"]
+  readonly __url: ERRORS_LOOKUP[keyof ERRORS_LOOKUP]["url"]
+  readonly __context: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  __value: any
+  readonly __value: any
 }
 
 // -----------------------------------------------------------------

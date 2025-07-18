@@ -15,9 +15,8 @@ import { findTypeDeclarations } from "../src/tsc"
 //   printer.printNode(ts.EmitHint.Unspecified, typeStringAlias, ts.createSourceFile("", "", ts.ScriptTarget.Latest)),
 // )
 
-const rootDir = "./src"
-const dirsToScan = ["./src", "./tests", "./lib"]
-const myType = "ValidateFlatTuple$"
-const declarationPaths = findTypeDeclarations(rootDir, dirsToScan, myType)
+const dirsToScan = "./src"
+const typesToFind = ["ValidateFlatTuple$", "ReTypeError"]
+const declarationPaths = findTypeDeclarations(dirsToScan, typesToFind)
 
 console.log("declarationPaths", declarationPaths)

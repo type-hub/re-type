@@ -20,7 +20,7 @@ export const ERROR_TYPE = {
 export type ErrorType = ValueOf<typeof ERROR_TYPE>
 
 // TODO: do we need js here?
-export const ERRORS_LOOKUP = {
+export const ErrorsLookup = {
   // input --------------------------------
   OpenTypeError: {
     msg: "input: is open types (any, unknown, never)",
@@ -60,21 +60,21 @@ export const ERRORS_LOOKUP = {
   { msg: string; url: string }
 >
 
-export type ErrorsLookup = typeof ERRORS_LOOKUP
+export type ERRORS_LOOKUP = typeof ErrorsLookup
 
 // TODO: js docs
 export type ReTypeError<
-  _ErrorType extends keyof ErrorsLookup,
+  _ErrorType extends keyof ERRORS_LOOKUP,
   Context extends string,
   Value,
   _Constraint = "TODO:unknown"
 > = {
-  __type: _ErrorType
-  __message: ErrorsLookup[_ErrorType]["msg"]
-  __context: Context
-  __value: Value & {} // TODO: pretty
-  __constraint?: _Constraint & {} // TODO: pretty
-  __url: ErrorsLookup[_ErrorType]["url"]
+  readonly __type: _ErrorType
+  readonly __message: ERRORS_LOOKUP[_ErrorType]["msg"]
+  readonly __context: Context
+  readonly __value: Value & {} // TODO: pretty
+  readonly __constraint?: _Constraint & {} // TODO: pretty
+  readonly __url: ERRORS_LOOKUP[_ErrorType]["url"]
 }
 
 // -----------------------

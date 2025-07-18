@@ -6,7 +6,11 @@ import { parseTypeDeclaration } from "utils/parseTypeDeclarations"
 import type { WITH_CONTEXT } from "utils/resolveGenerics"
 import { resolveGenerics } from "utils/resolveGenerics"
 import { typeBuilder } from "utils/typeBuilder"
+import { eitherBody } from "utils/typeBuilder/eitherBody"
+import type { Brand } from "utilTypes"
 import type { WITH_COMMENTS } from "../types"
+
+export type LAX_BODY = Brand<string, "LAX_BODY">
 
 export class Lax {
   protected parsedType: PARSED_TYPE_DECLARATION
@@ -48,9 +52,7 @@ export class Lax {
       currentTypeName: typeName,
     })
 
-    const body = `[_Error] extends [never]
-  ? ${typeInvocation}
-  : _Error`
+    const body = eitherBody(typeInvocation)
 
     return typeBuilder.typeDeclaration({
       docs,
@@ -62,7 +64,7 @@ export class Lax {
 
   // --- PROTECTED ----------------------------------------------------------------------
 
-  protected makeLaxBody({ withContext, withComments }: WITH_COMMENTS & WITH_CONTEXT): string {
+  protected makeLaxBody({ withContext, withComments }: WITH_COMMENTS & WITH_CONTEXT): LAX_BODY {
     // TODO: mismatch error could be more detailed and reuse validation (what it should be)
     // TODO: inside validation missing (before return)
 
@@ -82,7 +84,7 @@ export class Lax {
           generics: resolveGenerics({ withContext, generics }),
           // currentTypeName: "laxName",
         }),
-      )
+      ) as LAX_BODY
 
     if (withComments) {
       return (
@@ -90,7 +92,7 @@ export class Lax {
         `
     // --- ${laxName} START ---
       ${conditionalTypeBody}
-    // --- ${laxName} END ---`
+    // --- ${laxName} END ---` as LAX_BODY
       )
     }
 

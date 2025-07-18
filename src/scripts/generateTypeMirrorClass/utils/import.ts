@@ -1,28 +1,29 @@
-import { ImportRegistry } from "../../../services/ImportRegistry"
+import { flip, includes, pipe, trim } from "ramda"
 
-export function getPrimitiveConstraints(): string[] {
-  return ["string", "number", "boolean", "null", "undefined", "symbol", "void", "never", "any", "unknown"]
-}
+const primitiveConstraints: string[] = [
+  "string",
+  "number",
+  "boolean",
+  "null",
+  "undefined",
+  "symbol",
+  "void",
+  "never",
+  "any",
+  "unknown",
+]
 
-export function isPrimitiveArray(constraint: string): boolean {
-  return constraint.endsWith("[]") && getPrimitiveConstraints().includes(constraint.replace(/\[\]$/, "").trim())
-}
+const stripKeyof = (constraint: string): string => constraint.replace(/^keyof\s+/, "")
+const stripArray = (constraint: string): string => constraint.replace(/\[\]$/, "")
 
-export function isPrimitiveConstraint(constraint?: string): boolean {
-  if (!constraint) return true
-  if (getPrimitiveConstraints().includes(constraint.trim())) return true
-  if (isPrimitiveArray(constraint)) return true
-  return false
-}
+export const deconstructConstraint: (constraint: string) => string = pipe(
+  //
+  stripKeyof,
+  stripArray,
+  trim,
+)
 
-export function stripKeyof(constraint?: string): string | undefined {
-  if (!constraint) return constraint
-  return constraint.replace(/^keyof\s+/, "").trim()
-}
-
-export function maybeRegisterConstraintImport(constraint?: string): void {
-  const sanitized = stripKeyof(constraint)
-  if (sanitized && !isPrimitiveConstraint(sanitized)) {
-    ImportRegistry.addImport(sanitized)
-  }
-}
+export const isPrimitiveConstraint: (constraint: string) => boolean = pipe(
+  deconstructConstraint,
+  flip(includes)(primitiveConstraints),
+)

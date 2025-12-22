@@ -7,6 +7,7 @@ import type { WITH_CONTEXT } from "utils/resolveGenerics"
 import { resolveGenerics } from "utils/resolveGenerics"
 import { typeBuilder } from "utils/typeBuilder"
 import { eitherBody } from "utils/typeBuilder/eitherBody"
+import type { TYPE_DECLARATION } from "utils/typeBuilder/typeDefinitions"
 import type { Brand } from "utilTypes"
 import type { WITH_COMMENTS } from "../types"
 
@@ -19,7 +20,7 @@ export class Lax {
     this.parsedType = parseTypeDeclaration(typeDef)
   }
 
-  public typeDeclaration({ withContext }: WITH_CONTEXT): string {
+  public typeDeclaration({ withContext }: WITH_CONTEXT): TYPE_DECLARATION {
     const generics = resolveGenerics({ withContext, generics: this.parsedType.generics })
     const typeName = resolveLaxName(this.parsedType.typeName)
     const docs = createJsDocs({ typeName, generics })
@@ -34,7 +35,7 @@ export class Lax {
     })
   }
 
-  public eitherTypeDeclaration({ withContext }: WITH_CONTEXT): string {
+  public eitherTypeDeclaration({ withContext }: WITH_CONTEXT): TYPE_DECLARATION {
     const targetTypeName = resolveLaxName(this.parsedType.typeName)
     const typeName = resolveEitherName(targetTypeName)
     const genericsWithError = resolveGenerics({

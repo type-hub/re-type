@@ -19,13 +19,21 @@ export const generateMethod = ({ typeName, generics }: PARSED_TYPE_DECLARATION):
   const paramsDecl = generateParamsDeclaration(generics)
   const paramsInterp = generateParamsInterpolation(generics)
 
+  // typeName === "BypassModes" && console.log("typeName --->", typeName, generics)
+
   generics.forEach(({ constraint: _constraint }) => {
     if (_constraint) {
       const constraint = deconstructConstraint(_constraint)
 
+      // console.log("constraint --->", constraint)
+
       if (!isPrimitiveConstraint(constraint)) {
         ImportRegistry.addImport(constraint)
       }
+    } else {
+      ImportRegistry.addImport(typeName)
+
+      console.log("typeName XXX --->", typeName)
     }
   })
 

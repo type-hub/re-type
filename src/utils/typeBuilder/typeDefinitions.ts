@@ -7,6 +7,8 @@ import type { CurrentTypeName } from "utils/reTypeError/trace"
 import type { EITHER_BODY } from "./eitherBody"
 import { type GENERIC_ARGS_DECLARATION, genericArgsInvocation } from "./genericArgs"
 
+export type TYPE_DECLARATION = Brand<string, "TYPE_DECLARATION">
+
 export const typeDeclaration = ({
   docs,
   typeName,
@@ -17,8 +19,9 @@ export const typeDeclaration = ({
   typeName: string
   genericsDeclarations: GENERIC_ARGS_DECLARATION
   body: EITHER_BODY | LAX_BODY | STRICT_LAX_BODY
-}): string => `${docs}
-type ${typeName}<${genericsDeclarations}> = ${body}`
+}): TYPE_DECLARATION =>
+  `${docs}
+type ${typeName}<${genericsDeclarations}> = ${body}` as TYPE_DECLARATION
 
 type Props = SafeOmit<PARSED_TYPE_DECLARATION, "body"> & { currentTypeName?: CurrentTypeName }
 

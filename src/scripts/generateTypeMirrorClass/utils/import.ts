@@ -1,6 +1,6 @@
 import { flip, includes, pipe, trim } from "ramda"
 
-const primitiveConstraints: string[] = [
+const primitiveConstraints = [
   "string",
   "number",
   "boolean",
@@ -11,7 +11,7 @@ const primitiveConstraints: string[] = [
   "never",
   "any",
   "unknown",
-]
+] as const
 
 const stripKeyof = (constraint: string): string => constraint.replace(/^keyof\s+/, "")
 const stripArray = (constraint: string): string => constraint.replace(/\[\]$/, "")

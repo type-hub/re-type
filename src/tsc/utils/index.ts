@@ -16,6 +16,7 @@ export const getNodeText =
     sanitize(sourceText.slice(node.pos, node.end))
 
 export const getNodeBody = (node: ts.TypeAliasDeclaration, sourceText: string): string =>
+  // TODO: sanitize
   getNodeText(sourceText)(node.type)
 
 export const createSourceFile = (sourceText: string, filePath: string = "any.ts"): ts.SourceFile =>
@@ -33,6 +34,7 @@ export const getGenericsFromNode = (
   node: ts.InterfaceDeclaration | ts.TypeAliasDeclaration,
   sourceText: string,
 ): GENERIC[] => {
+  // TODO: this if is probably not needed, check isTypeFunction guard
   if (!node.typeParameters || node.typeParameters.length === 0) {
     return []
   }

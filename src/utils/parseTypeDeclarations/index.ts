@@ -1,4 +1,5 @@
-import { isTypeFunction } from "scripts/generateTypeMirrorClass/typeProcessing/guards"
+import { equals } from "ramda"
+import { isTypeFunction } from "tsc/guards"
 import { createSourceFile, getGenericsFromNode, getNodeBody, getNodeText } from "tsc/utils"
 import type ts from "typescript"
 
@@ -21,7 +22,6 @@ const _parseNode = (node: ts.TypeAliasDeclaration, typeFuncDef: string): PARSED_
 })
 
 export const parseTypeDeclaration = (typeFuncDef: string): PARSED_TYPE_DECLARATION => {
-  // TODO: use SET instead of array
   const _parsed: PARSED_TYPE_DECLARATION[] = []
 
   createSourceFile(typeFuncDef)
@@ -32,6 +32,15 @@ export const parseTypeDeclaration = (typeFuncDef: string): PARSED_TYPE_DECLARATI
         _parsed.push(_parseNode(node, typeFuncDef))
       }
     })
+
+  // detect non symmetrical definitions
+  _parsed.reduce((acc, v) => {
+    if (equals(acc, v)) {
+      return acc
+    }
+
+    throw new Error(`parseTypeDeclarations: non symmetrical definitions`)
+  }, _parsed[0])
 
   const parsed = _parsed[0]
 

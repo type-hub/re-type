@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { readFileSync as _readFileSync } from "fs"
+import { curry } from "ramda"
 
 type PartialTuple<T extends any[]> = T extends [infer Head, ...infer Tail]
   ? //
@@ -60,3 +61,12 @@ const e = test("1", 1, "")
 //
 
 export const readFileSync = (filePath: string): string => _readFileSync(filePath, "utf-8")
+
+const x = curry((a: number, b: string, c?: boolean) => a + b + c)
+
+const y = x(1)
+//    ^?
+const z = y("2")
+//    ^?
+const w = z(true)
+//    ^?

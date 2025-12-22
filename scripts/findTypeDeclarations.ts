@@ -16,7 +16,7 @@ import { findTypeDeclarations } from "../src/tsc"
 // )
 
 const dirsToScan = "./src"
-const typesToFind = ["ValidateFlatTuple$", "ReTypeError"]
+const typesToFind = ["ValidateFlatTuple$", "ReTypeError", "BypassModes"]
 const declarationPaths = findTypeDeclarations(dirsToScan, typesToFind)
 
 console.log("declarationPaths", declarationPaths)

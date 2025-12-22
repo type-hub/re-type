@@ -18,6 +18,6 @@ const main = (dirToScan: string, outputFilePath: string): void => {
 
 main(
   //
-  path.resolve(process.cwd(), "src/coreTypes"),
+  path.resolve(process.cwd(), "src"),
   path.resolve(process.cwd(), "dist/TypeMirror.ts"),
 )

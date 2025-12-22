@@ -1,4 +1,5 @@
 import * as fs from "fs"
+import { isTypeAlias } from "tsc/guards"
 import { getGenericsFromNode } from "tsc/utils"
 import * as ts from "typescript"
 
@@ -44,7 +45,7 @@ function analyzeTypeParameters() {
 
   // Process each type alias declaration
   sourceFile.forEachChild((node) => {
-    if (ts.isTypeAliasDeclaration(node)) {
+    if (isTypeAlias(node)) {
       const typeName = node.name.text
       const typeParams = getGenericsFromNode(node, sourceText)
 

@@ -1,6 +1,6 @@
 import type { GENERIC } from "utils/parseTypeDeclarations"
-import type { ErrorType, ErrorsLookup, ReTypeError } from "../../coreTypes/errors"
-import { ERRORS_LOOKUP, ERROR_TYPE } from "../../coreTypes/errors"
+import type { ERRORS_LOOKUP, ErrorType, ReTypeError } from "../../coreTypes/errors"
+import { ERROR_TYPE, ErrorsLookup } from "../../coreTypes/errors"
 import type { SafeOmit } from "../../utilTypes"
 import type { TraceProps } from "./trace"
 import { traceArg } from "./trace"
@@ -17,7 +17,7 @@ type ErrorHandler = {
 
 const buildReTypeError = <
   //
-  _ErrorType extends keyof ErrorsLookup,
+  _ErrorType extends keyof ERRORS_LOOKUP,
   Context extends string,
   _Generic extends GENERIC,
 >(
@@ -27,8 +27,8 @@ const buildReTypeError = <
 ): string => {
   const e: ReTypeError<_ErrorType, Context, _Generic["name"], _Generic["constraint"]> = {
     __type,
-    __message: ERRORS_LOOKUP[__type]["msg"],
-    __url: ERRORS_LOOKUP[__type]["url"],
+    __message: ErrorsLookup[__type]["msg"],
+    __url: ErrorsLookup[__type]["url"],
     __context,
     __value: generic.name,
     __constraint: generic.constraint,

@@ -8,7 +8,7 @@ export const CONTEXT_GENERIC = {
   constraint: "string",
 } as const satisfies GENERIC
 
-const ERROR = "_Error" as const
+export const ERROR = "_Error" as const
 // const ERROR_DECLARATION = `${ERROR} extends GENERIC_ERROR` as const
 export const ERROR_GENERIC = {
   name: ERROR,

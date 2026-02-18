@@ -9,7 +9,7 @@ module.exports = {
         path: "^src/utils/",
       },
       to: {
-        path: "^src/classses/",
+        path: "^src/classes/",
       },
     },
     //
@@ -153,7 +153,7 @@ module.exports = {
         "section of your package.json. If this module is development only - add it to the " +
         "from.pathNot re of the not-to-dev-dep rule in the dependency-cruiser configuration",
       from: {
-        path: "^(src/classses)",
+        path: "^(src/classes)",
         pathNot: "[.](?:spec|test)[.](?:js|mjs|cjs|jsx|ts|mts|cts|tsx)$",
       },
       to: {
@@ -384,7 +384,7 @@ module.exports = {
               attributes: { fillcolor: "#FFA726", fontcolor: "black" },
             },
             {
-              criteria: { source: "classses" },
+              criteria: { source: "classes" },
               attributes: { fillcolor: "#EF5350", fontcolor: "black" },
             },
             {
@@ -402,7 +402,7 @@ module.exports = {
           ],
           dependencies: [
             {
-              criteria: { resolved: "classses" },
+              criteria: { resolved: "classes" },
               attributes: { color: "#EF5350" },
             },
             {

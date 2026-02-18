@@ -18,7 +18,6 @@ class _ImportRegistry {
     this.imports.clear()
   }
 
-  // TODO: replace string with CoreTypes
   addImport(importStatement: string): void {
     this.imports.add(importStatement)
   }
@@ -28,7 +27,7 @@ class _ImportRegistry {
   }
 
   getImports(): string[] {
-    return Array.from(this.imports)
+    return [...this.imports]
   }
 
   reset(): void {

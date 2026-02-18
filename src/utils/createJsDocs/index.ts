@@ -1,7 +1,9 @@
-import type { SafeOmit } from "utilTypes"
+import type { Brand, SafeOmit } from "utilTypes"
 import type { PARSED_TYPE_DECLARATION } from "../parseTypeDeclarations"
 
-export const createJsDocs = ({ typeName: name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">): string => {
+export type JS_DOCS = Brand<string, "JsDocs">
+
+export const createJsDocs = ({ typeName: name, generics }: SafeOmit<PARSED_TYPE_DECLARATION, "body">): JS_DOCS => {
   const params = generics
     .map((generic) => {
       const defaultValue = generic.defaultValue ? `any, fallbacks to ${generic.defaultValue}` : "any"
@@ -15,5 +17,5 @@ export const createJsDocs = ({ typeName: name, generics }: SafeOmit<PARSED_TYPE_
   return `/**
 # ${name}
 ${params}
-*/`
+*/` as JS_DOCS
 }

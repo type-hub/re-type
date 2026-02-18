@@ -1,40 +1,95 @@
-import * as fs from "fs"
 import * as ts from "typescript"
 import { collectTsFilePaths } from "./collectTsFilePaths"
+import { isExportedInterface, isExportedStaticTypeAlias } from "./guards"
+import { createSourceFileFromPath, getNodeText } from "./utils"
 
-export const findTypeDeclarations = (rootDir: string, dirsToScan: string[], myType: string): string[] => {
+export const findTypeDeclarations = (dirsToScan: string, providedTypeDeclaration: string[]): string[] => {
+  const importPaths = new Set<string>()
+  const allFoundTypes: { name: string; path: string }[] = []
+  // Array to specifically track static type declarations like 'export type X = string'
+  const staticTypeDeclarations: { name: string; path: string; value: string }[] = []
+
   const filePaths = collectTsFilePaths(dirsToScan)
-
-  // console.log(`Total TypeScript files found: ${filePaths.length}`)
-  // filePaths.forEach((file) => console.log(`  ${file}`))
-
-  const defPaths: string[] = []
+  console.warn("Scanning files:", filePaths.length)
 
   for (const filePath of filePaths) {
-    const sourceFile = ts.createSourceFile(filePath, fs.readFileSync(filePath, "utf8"), ts.ScriptTarget.Latest)
-
-    // print source file
-    // console.log(
-    //   printer.printNode(ts.EmitHint.Unspecified, sourceFile, ts.createSourceFile("", "", ts.ScriptTarget.Latest)),
-    // )
+    const { sourceFile, sourceText } = createSourceFileFromPath(filePath)
+    const relativePath = filePath.replace(/\.ts$/, "")
 
     ts.forEachChild(sourceFile, (node) => {
-      if (ts.isTypeAliasDeclaration(node) && node.modifiers?.some((mod) => mod.kind === ts.SyntaxKind.ExportKeyword)) {
-        const typeName = node.name.escapedText
-        console.log(
-          typeName,
-          rootDir,
-          node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword),
-        )
+      // Check for exported static type aliases
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-        if (typeName === myType) {
-          // defPaths.push(filePath.replace(rootDir, ".").replace(rootDir.replace("./", ""), "."))
-          defPaths.push(filePath) ///.replace(rootDir, ".").replace(rootDir.replace("./", ""), "."))
+      // Count nodes for debugging
+      // console.assert(
+      //   node.name?.escapedText.toString() !== "BypassModes",
+      //   "Processing node -----> ",
+      //   // node.name?.escapedText.toString(),
+      // )
+
+      if (isExportedStaticTypeAlias(node)) {
+        const currentTypeName = node.name.escapedText.toString()
+
+        console.log("currentTypeName --->", currentTypeName, node.kind)
+
+        // Get the type's value/right-hand side text
+        const typeValue = node.type ? getNodeText(sourceText)(node.type) : ""
+
+        // Check if it's a simple static type (string, number, boolean, etc. or literal)
+        if (
+          // dive here :)
+          // ts.isLiteralTypeNode(node.type) ||
+
+          node.kind === ts.SyntaxKind.TypeAliasDeclaration
+
+          // (node.type.kind >= ts.SyntaxKind.StringKeyword && node.type.kind <= ts.SyntaxKind.UndefinedKeyword) // Covers all keyword types
+          // ts.isStringLiteral(node.type) ||
+          // ts.isNumericLiteral(node.type)
+        ) {
+          staticTypeDeclarations.push({
+            name: currentTypeName,
+            path: relativePath,
+            value: typeValue,
+          })
+          console.warn(`Found static type: ${currentTypeName} = ${typeValue}`)
+          allFoundTypes.push({ name: currentTypeName, path: relativePath })
+          importPaths.add(`import { ${currentTypeName} } from "${relativePath}"`)
+        }
+
+        // For debugging: name node details
+        console.warn("node.name  ---> ", getNodeText(sourceText)(node.name))
+
+        allFoundTypes.push({ name: currentTypeName, path: relativePath })
+
+        if (providedTypeDeclaration.includes(currentTypeName)) {
+          importPaths.add(`import { ${currentTypeName} } from "${relativePath}"`)
+        }
+      }
+      // Check for exported interfaces
+      // TODO: DEAD CODE
+      else if (isExportedInterface(node)) {
+        console.log("DEAD")
+
+        const currentTypeName = node.name.escapedText.toString()
+        allFoundTypes.push({ name: currentTypeName, path: relativePath })
+
+        if (providedTypeDeclaration.includes(currentTypeName)) {
+          importPaths.add(`import { ${currentTypeName} } from "${relativePath}"`)
         }
       }
     })
   }
 
-  return defPaths
+  console.warn("---------------------------------------------")
+  console.warn("\n", "ALL FOUND TYPES", "\n")
+  console.warn("Found exported static types:", allFoundTypes.length)
+  allFoundTypes.forEach((type) => console.warn(`${type.name} - ${type.path}`))
+  console.warn("---------------------------------------------")
+
+  // Log the static type declarations specifically
+  console.warn("\n", "STATIC TYPE DECLARATIONS", "\n")
+  console.warn("Found static type declarations:", staticTypeDeclarations.length)
+  staticTypeDeclarations.forEach((type) => console.warn(`${type.name} = ${type.value} - ${type.path}`))
+  console.warn("---------------------------------------------")
+
+  return [...importPaths.values()]
 }

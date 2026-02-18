@@ -45,7 +45,7 @@ async function analyzeTypeScriptFiles(): Promise<void> {
   console.log("🔍 Analyzing TypeScript files in the project...")
 
   // Find all TypeScript files in the classes directory
-  const classesDir = path.resolve(process.cwd(), "src", "classses")
+  const classesDir = path.resolve(process.cwd(), "src", "classes")
   const tsFiles = await findAllTsFiles(classesDir)
 
   console.log(`Found ${tsFiles.length} TypeScript files`)
